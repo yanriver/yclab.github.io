@@ -26,8 +26,8 @@ layout: page
 type: *name*
 ---
 
-{% include archive.html %}
-```
+#{% include archive.html %}
+#```
 Then the number of pages in the category will be displayed.
 
 ## License
