@@ -8,24 +8,18 @@
     <a class="header_circle" href="{{ '/' | relative_url }}">
       <img src="{{ site.user.pic | relative_url }}" alt="{{ site.user.picAlt }}">
     </a>
-    <span class="header_name">{{ site.user.name }}</span>
+    <!--<span class="header_name">{{ site.user.name }}</span>-->
     <span class="header_job">{{ site.user.job }}</span>
     <span class="header_mes">{{ site.user.message }}</span>
 
     <nav class="nav">
-      {% if site.user.aboutthelab %}
       <ul class="nav_list">
         <li class="nav_item">
-          <a href="{{ site.baseurl }}/aboutthelab.html">about the lab</a>
-        </li>
-      </ul>
-      {% endif %}
-      <ul class="nav_list">
-        <li class="nav_item">
-          <a href="{{ site.baseurl }}/categories/peoples.html">peoples</a>
-		  <a href="{{ site.baseurl }}/categories/publications.html">publications</a>
-		  <a href="{{ site.baseurl }}/categories/blog.html">blog</a>
-		  <a href="{{ site.baseurl }}/categories/contact.html">blog</a>
+		  <a href="{{ site.baseurl }}/aboutthelab.html">about the lab</a>
+          <p><a href="{{ site.baseurl }}/categories/peoples.html">peoples</a></p>
+		  <p><a href="{{ site.baseurl }}/categories/publications.html">publications</a></p>
+		  <p><a href="{{ site.baseurl }}/categories/blog.html">blog</a></p>
+		  <p><a href="{{ site.baseurl }}/categories/contact.html">contact</a></p>
         </li>
       </ul>
     </nav>
