@@ -1,0 +1,148 @@
+[
+  {
+    "name": "严川",
+    "degree": "老师",
+    "email": "hfxiyang@163.com",
+    "interest": "食物网、生物地理学、保护生物学",
+    "image": "../images/members/严川.jpg",
+    "status": "fixed"
+  },
+  {
+    "name": "郝希阳",
+    "degree": "博士",
+    "grade": "21级",
+    "email": "hfxiyang@163.com",
+    "interest": "食物网、生物地理学、保护生物学",
+    "image": "../images/members/郝希阳.jpg",
+    "status": "active"
+  },
+  {
+    "name": "赵洋洋",
+    "degree": "博士",
+    "grade": "22级",
+    "email": "zhaoyangyangsky@163.com",
+    "interest": "1.生态互作网络。2.草地传粉者-开花植物-植食者多层互作网络。3.野外生物多样性调查",
+    "image": "../images/members/赵洋洋.jpg",
+    "status": "active"
+  },
+  {
+    "name": "周飞",
+    "degree": "博士",
+    "grade": "23级",
+    "email": "809190394@qq.com",
+    "interest": "啮齿目动物食物网",
+    "image": "../images/members/周飞.png",
+    "status": "active"
+  },
+  {
+    "name": "周洁洋",
+    "degree": "博士",
+    "grade": "23级",
+    "email": "zhjieyang2023@lzu.edu.cn",
+    "interest": "植食昆虫-植物-病原真菌多层生态网络",
+    "image": "../images/members/周洁洋.jpg",
+    "status": "active"
+  },
+  {
+    "name": "张濠天",
+    "degree": "博士",
+    "grade": "24级",
+    "email": "hosky125@163.com",
+    "interest": "理论生态学",
+    "image": "../images/members/张濠天.jpg",
+    "status": "active"
+  },
+  {
+    "name": "姚紫珊",
+    "degree": "硕士",
+    "grade": "22级",
+    "email": "ylxester@163.com",
+    "interest": "人类活动影响下荒漠-绿洲生态系统动植物杂合巨作网络",
+    "image": "../images/members/姚紫珊.jpg",
+    "status": "active"
+  },
+  {
+    "name": "张志成",
+    "degree": "硕士",
+    "grade": "22级",
+    "email": "zhangzhicheng_eco@foxmail.com",
+    "interest": "祁连山东部地区开花植物-昆虫植食网络对海拔梯度的响应",
+    "image": "../images/members/张志成.jpg",
+    "status": "active"
+  },
+  {
+    "name": "邓晓玲",
+    "degree": "硕士",
+    "grade": "23级",
+    "email": "2451093787@qq.com",
+    "interest": "动物生态学，淡水鱼类食物网",
+    "image": "../images/members/邓晓玲.jpg",
+    "status": "active"
+  },
+    {
+    "name": "孙伟成",
+    "degree": "硕士",
+    "grade": "23级",
+    "email": "sunwch2023@lzu.edu.cn",
+    "interest": "群落生态学",
+    "image": "../images/members/孙伟成.jpg",
+    "status": "active"
+  },
+    {
+    "name": "白广生",
+    "degree": "硕士",
+    "grade": "24级",
+    "email": "3328788557@qq.com",
+    "interest": "昆虫、鸟类及鱼类的互作网络",
+    "image": "../images/members/白广生.jpg",
+    "status": "active"
+  },
+    {
+    "name": "罗添宝",
+    "degree": "硕士",
+    "grade": "24级",
+    "email": "luotb7@163.com",
+    "interest": "深度学习在生态中的应用",
+    "image": "../images/members/罗添宝.jpg",
+    "status": "active"
+  },
+  {
+    "name": "马博璇",
+    "degree": "本科",
+    "grade": "24级",
+    "email": "mabx2024@lzu.edu.cn",
+    "interest": "多层生态网络",
+    "image": "../images/members/马博璇.jpg",
+    "status": "active"
+  },
+  {
+    "name": "刘睿",
+    "degree": "硕士",
+    "grade": "20级",
+    "email": "",
+    "interest": "",
+    "image": "../images/members/刘睿.jpg",
+    "status": "graduated",
+    "direction": "沈阳生态所读博"
+  },
+  {
+    "name": "张永俊",
+    "degree": "硕士",
+    "grade": "20级",
+    "email": "",
+    "interest": "",
+    "image": "../images/members/张永俊.jpg",
+    "status": "graduated",
+    "direction": "动物研究所读博"
+  },
+  {
+    "name": "张一文",
+    "degree": "硕士",
+    "grade": "21级",
+    "email": "",
+    "interest": "",
+    "image": "../images/members/张一文.jpg",
+    "status": "graduated",
+    "direction": "北京师范大学读博"
+  }
+]

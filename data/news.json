@@ -1,0 +1,32 @@
+[
+    {
+        "title": "课题组团建",
+        "date": "2025-04-08",
+        "summary": "刘家峡-炳灵寺",
+        "image": "../news/images/250408.jpg",
+        "category": "event"
+    },
+    {
+        "title": "课题组论文被Ecology接收",
+        "date": "2025-02-26",
+        "summary": "本研究揭示了植物-食草动物/宿主-寄生物（PHP）和传粉者-植物-食草动物（PPH）三方网络中子网络结构及其相互连接特性对社区稳定性和物种持久性的影响，展示了不同子网络拓扑对生态系统功能的多样化作用。",
+        "image": "../news/images/250226ecology.jpg",
+        "category": "research"
+    },
+
+    {
+        "title": "课题组论文被Journal of Animal Ecology接收",
+        "date": "2025-01-30",
+        "summary": "在大陆尺度上，地理和系统发生学对啮齿动物与种子植物互动网络的结构起主导作用，且不同互动类型的物种特征对这些角色的影响存在差异。",
+        "image": "../news/images/250130jae.jpg",
+        "category": "research"
+    },
+
+    {
+        "title": "课题组论文被Global Change Biology接收",
+        "date": "2025-01-03",
+        "summary": "气候变化和土地利用变化将导致到2100年陆地脊椎动物食物链的规模和营养联系大幅减少，并且食物链结构将经历显著且具有空间异质性的变化。",
+        "image": "../news/images/250103gcb.jpg",
+        "category": "research"
+    }
+]

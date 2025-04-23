@@ -1,0 +1,793 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>发表成果 | YCLab</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <style>
+        .navbar {
+            top: 0;
+            position: fixed;
+            z-index: 1000;
+            display: flex;
+            height: var(--navbar-height);
+            width: 100%;
+            align-items: center;
+            background-color: rgba(44,62,80,1);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        /* 发表成果页特有样式 */
+        .publications-header {
+            margin-top: 10vh;
+            text-align: center;
+            margin-bottom: 2rem;
+            padding: 0 1.5rem;
+            animation: fadeInDown 0.8s ease-out;
+        }
+
+        .publications-header h1 {
+            font-size: 2.5rem;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+            position: relative;
+            display: inline-block;
+        }
+        
+
+        .publications-header p {
+            color: #666;
+            max-width: 800px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        .publications-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1.5rem 3rem;
+        }
+
+        /* 时间轴容器样式 */
+        .timeline-container {
+            margin: 2rem 0 3rem;
+            padding: 1rem 0;
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            position: relative;
+        }
+        #timelineNav {
+            display: flex;
+            gap: 8px; /* 减小间距 */
+            padding: 0 15px;
+            min-width: fit-content;
+        }
+        .timeline-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            z-index: 1;
+        }
+
+        /* 时间轴主体 */
+        .timeline {
+            display: flex;
+            height: 100px;
+            align-items: flex-end;
+            position: relative;
+            padding-top: 30px;
+            overflow-x: auto;
+            scrollbar-width: none; /* Firefox */
+        }
+        .timeline::-webkit-scrollbar {
+            display: none; /* Chrome/Safari */
+        }
+        /* 时间轴基线 */
+        .timeline-line {
+            position: absolute;
+            left: 0;
+            right: 0;
+            bottom: 40px;
+            height: 3px;
+            background: #e0e0e0;
+            z-index: 1;
+        }
+        /* 年份节点 */
+        .timeline-year {
+            position: relative;
+            flex-shrink: 0;
+            width: 67px; /* 固定宽度 */
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            z-index: 2;
+            padding-bottom: 10px;
+        }
+        /* 年份标记点 */
+        .timeline-marker {
+            position: absolute;
+            bottom: 37px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #aaa;
+            border: 3px solid #fff;
+            transition: all 0.3s ease;
+            z-index: 3;
+        }
+
+        .timeline-bar {
+            width: 25px;
+            margin: 0 auto;
+        }
+        /* 年份标签 */
+        .timeline-year-label {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            font-size: 0.9rem;
+            color: #666;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        /* 发文数量标签 */
+        .timeline-count {
+            position: absolute;
+            top: -25px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 0.8rem;
+            color: #fff;
+            background: var(--primary-color);
+            padding: 2px 6px;
+            border-radius: 12px;
+            opacity: 0;
+            transition: all 0.3s ease;
+        }
+        /* 悬停效果 */
+        .timeline-year:hover .timeline-marker {
+            background: var(--primary-color);
+            transform: translateX(-50%) scale(1.2);
+        }
+        .timeline-year:hover .timeline-year-label {
+            color: var(--primary-color);
+            font-weight: 600;
+        }
+        .timeline-year:hover .timeline-count {
+            opacity: 1;
+            top: -30px;
+        }
+        /* 当前活跃年份样式 */
+        .timeline-year.active .timeline-marker {
+            background: var(--primary-color);
+            width: 16px;
+            height: 16px;
+            box-shadow: 0 0 0 4px rgba(44,62,80,0.2);
+        }
+        .timeline-year.active .timeline-year-label {
+            color: var(--primary-color);
+            font-weight: 700;
+            transform: scale(1.1);
+        }
+        .timeline-year.active .timeline-count {
+            opacity: 1;
+            top: -35px;
+            background: var(--secondary-color);
+        }
+        /* 移动端适配 */
+        @media (max-width: 768px) {
+            #timelineNav {
+                gap: 6px;
+                padding: 0 10px;
+            }
+            .timeline-year {
+                width: 60px;
+            }
+            .timeline-bar {
+                width: 20px;
+            }
+            .timeline-year-label {
+                font-size: 0.8rem;
+            }
+        }
+        @media (max-width: 480px) {
+            #timelineNav {
+                gap: 4px;
+            }
+            .timeline-year {
+                width: 55px;
+            }
+            .timeline-bar {
+                width: 18px;
+            }
+            .timeline-year-label {
+                font-size: 0.75rem;
+            }
+        }
+
+        .publications-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .publication-item {
+            background: #fff;
+            border-radius: 8px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            transition: all 0.4s ease;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 0.6s forwards;
+        }
+
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .publication-item:hover {
+            transform: translateY(-5px) !important;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+        }
+
+        .pub-year {
+            font-size: 1.5rem;
+            color: var(--primary-color);
+            margin: 2rem 0 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid #eee;
+            display: flex;
+            align-items: center;
+            scroll-margin-top: 100px;
+        }
+
+        .pub-year::before {
+            content: "";
+            display: inline-block;
+            width: 8px;
+            height: 20px;
+            background: var(--secondary-color);
+            margin-right: 10px;
+        }
+
+        .pub-title {
+            font-size: 1.2rem;
+            color: #333;
+            margin-bottom: 0.8rem;
+            font-weight: 600;
+            line-height: 1.4;
+        }
+
+        /* 新增作者样式 */
+        .pub-authors {
+            color: #555;
+            font-size: 1rem;
+            margin-bottom: 0.8rem;
+            line-height: 1.4;
+        }
+
+        .author-first {
+            font-weight: 600;
+        }
+
+        .author-corresponding {
+            position: relative;
+        }
+
+        .author-corresponding::after {
+            content: "*";
+            font-size: 1.2em;
+            color: var(--secondary-color);
+            position: relative;
+            top: -0.3em;
+        }
+
+        .pub-journal {
+            color: var(--secondary-color);
+            font-size: 1rem;
+            margin-bottom: 0.8rem;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+        }
+
+        .pub-journal::before {
+            content: "📖";
+            margin-right: 0.5rem;
+            font-size: 0.9em;
+        }
+
+        .pub-doi {
+            color: #666;
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .pub-doi::before {
+            content: "🔗";
+            margin-right: 0.5rem;
+            font-size: 0.9em;
+        }
+
+        .no-publications {
+            text-align: center;
+            padding: 3rem;
+            color: #666;
+        }
+
+        @media (max-width: 768px) {
+            .publications-header h1 {
+                font-size: 2rem;
+            }
+
+            .pub-year {
+                font-size: 1.3rem;
+            }
+
+            .pub-title {
+                font-size: 1.1rem;
+            }
+
+            .hamburger {
+                display: block;
+            }
+
+            .nav-links {
+                position: fixed;
+                top: var(--navbar-height);
+                left: 0;
+                width: 100%;
+                background-color: rgba(44,62,80,0.95);
+                flex-direction: column;
+                align-items: center;
+                padding: 20px 0;
+                transform: translateY(-150%);
+                transition: transform 0.3s ease;
+            }
+
+            .nav-links.active {
+                transform: translateY(0);
+            }
+
+            .nav-item {
+                margin: 10px 0;
+            }
+
+            .hamburger.active .bar:nth-child(1) {
+                transform: translateY(8px) rotate(45deg);
+            }
+
+            .hamburger.active .bar:nth-child(2) {
+                opacity: 0;
+            }
+
+            .hamburger.active .bar:nth-child(3) {
+                transform: translateY(-8px) rotate(-45deg);
+            }
+        }
+
+        @media (max-width: 480px) {
+            .timeline {
+                height: 80px;
+            }
+
+            .timeline-year {
+                padding: 0 10px;
+            }
+
+            .timeline-bar {
+                width: 15px;
+            }
+        }
+        /* 回到顶部按钮样式 */
+        #backToTopBtn {
+            display: none;
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            z-index: 99;
+            border: none;
+            outline: none;
+            background-color: var(--primary-color);
+            color: white;
+            cursor: pointer;
+            padding: 12px 18px;
+            border-radius: 30px;
+            font-size: 14px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            transition: all 0.3s ease;
+        }
+
+        #backToTopBtn:hover {
+            background-color: var(--secondary-color);
+            transform: translateY(-3px);
+        }
+
+        /* 无发表成果的年份样式 */
+        .no-publications-year {
+            text-align: center;
+            color: #777;
+            padding: 20px;
+            font-style: italic;
+        }
+
+        /* 重新加载按钮样式 */
+        .reload-btn {
+            margin-top: 1rem;
+            padding: 0.5rem 1rem;
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .reload-btn:hover {
+            background: var(--secondary-color);
+        }
+
+        .footer {
+            background-color: var(--primary-color);
+            color: white;
+            text-align: center;
+            padding: 20px;
+            margin-top: 50px;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 20px;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <!-- 导航栏 - 与主页一致 -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="../index.html" class="logo-link">
+                <img src="../images/lab-logo.jpg" alt="YCLab Logo">
+            </a>
+            <button class="hamburger">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </button>
+            <ul class="nav-links">
+                <li><a href="../index.html" class="nav-item">Home</a></li>
+                <li><a href="news.html" class="nav-item">News</a></li>
+                <li><a href="research.html" class="nav-item">Research</a></li>
+                <li><a href="publications.html" class="nav-item active">Publications</a></li>
+                <li><a href="members.html" class="nav-item">Members</a></li>
+                <li><a href="blogs.html" class="nav-item">Blogs</a></li>
+<!--                <li><a href="contact.html" class="nav-item">Contact</a></li>-->
+            </ul>
+        </div>
+    </nav>
+
+    <!-- 发表成果内容 -->
+    <main>
+        <div class="publications-header">
+            <h1>发表成果</h1>
+            <p>实验室在生态领域发表的学术论文</p>
+        </div>
+
+        <div class="publications-container">
+            <!-- 时间轴导航 -->
+            <div class="timeline-container">
+                <div class="timeline" id="timelineNav"></div>
+                <div class="timeline-line"></div>
+            </div>
+
+            <!-- 发表成果列表容器 -->
+            <div id="publicationsContent">
+                <div class="loading">加载中...</div>
+            </div>
+        </div>
+    </main>
+
+    <!-- 页脚 - 与主页一致 -->
+    <footer class="footer">
+        <p>&copy; 2025 YCLab. All rights reserved.</p>
+    </footer>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const config = {
+        primaryColor: '#2c3e50',
+        secondaryColor: '#3498db',
+        animationOffset: 100,
+        scrollOffset: 150,
+        dataPaths: [
+            '../data/publications.json',
+            './data/publications.json',
+            'publications.json'
+        ]
+    };
+
+    async function initPublicationsPage() {
+        try {
+            document.documentElement.style.setProperty('--primary-color', config.primaryColor);
+            document.documentElement.style.setProperty('--secondary-color', config.secondaryColor);
+            const data = await loadPublicationsData();
+            const yearRange = getYearRange(data);
+            const publicationsByYear = groupPublications(data, yearRange);
+            renderPublications(publicationsByYear);
+            generateTimeline(publicationsByYear);
+            addBackToTopButton();
+            setupEventListeners();
+            animatePublicationsOnScroll();
+            updateActiveYear();
+        } catch (error) {
+            console.error('初始化失败:', error);
+            showErrorUI(error);
+        }
+    }
+
+    async function loadPublicationsData() {
+        let lastError = null;
+        for (const path of config.dataPaths) {
+            try {
+                const response = await fetch(path);
+                if (!response.ok) throw new Error(`HTTP错误: ${response.status}`);
+                const data = await response.json();
+                const validData = data.filter(item => item.title && item.year && !isNaN(parseInt(item.year)));
+                if (validData.length === 0) throw new Error('无有效数据');
+                return validData;
+            } catch (error) {
+                lastError = error;
+                console.warn(`从 ${path} 加载失败:`, error);
+            }
+        }
+        throw lastError || new Error('所有数据源加载失败');
+    }
+
+    function getYearRange(data) {
+        const years = data.map(item => parseInt(item.year)).filter(year => !isNaN(year));
+        if (years.length === 0) return [new Date().getFullYear(), new Date().getFullYear()];
+        return [Math.max(...years), Math.min(...years)];
+    }
+
+    function groupPublications(data, yearRange) {
+        const [maxYear, minYear] = yearRange;
+        const grouped = {};
+        for (let year = maxYear; year >= minYear; year--) {
+            grouped[year] = data.filter(p => parseInt(p.year) === year);
+        }
+        return grouped;
+    }
+
+    function renderPublications(groupedData) {
+        const container = document.getElementById('publicationsContent');
+        container.innerHTML = '';
+        if (Object.keys(groupedData).length === 0) {
+            container.innerHTML = '<div class="no-publications">当前无发表成果</div>';
+            return;
+        }
+        const years = Object.keys(groupedData).sort((a, b) => b - a);
+        years.forEach(year => {
+            const publications = groupedData[year];
+            const yearSection = document.createElement('div');
+            yearSection.className = 'year-section';
+            const yearHeader = document.createElement('h2');
+            yearHeader.className = 'pub-year';
+            yearHeader.textContent = year;
+            yearHeader.dataset.year = year;
+            yearHeader.id = `year-${year}`;
+            const publicationsList = document.createElement('div');
+            publicationsList.className = 'publications-list';
+            if (publications.length > 0) {
+                publications.forEach((pub, index) => {
+                    const pubItem = createPublicationItem(pub, index);
+                    publicationsList.appendChild(pubItem);
+                });
+            } else {
+                publicationsList.appendChild(createEmptyYearNotice());
+            }
+            yearSection.appendChild(yearHeader);
+            yearSection.appendChild(publicationsList);
+            container.appendChild(yearSection);
+        });
+    }
+
+    function createPublicationItem(pub, index) {
+        const pubItem = document.createElement('div');
+        pubItem.className = 'publication-item';
+        pubItem.style.animationDelay = `${index * 0.1}s`;
+        let authorsHTML = '';
+        if (pub.author) {
+            const authorsArray = pub.author.split(', ').map(a => a.trim());
+            const authorsList = authorsArray.map(author => {
+                let classes = [];
+                if (author.includes('#')) {
+                    author = author.replace('#', '');
+                    classes.push('author-first');
+                }
+                if (author.includes('*')) {
+                    author = author.replace('*', '');
+                    classes.push('author-corresponding');
+                }
+                return `<span class="${classes.join(' ')}">${author}</span>`;
+            }).join(', ');
+            authorsHTML = `<div class="pub-authors">${authorsList}</div>`;
+        }
+        const doiHTML = pub.doi ?
+            `<a href="${pub.doi}" target="_blank" class="pub-doi-link">
+                <div class="pub-doi">DOI: ${pub.doi.replace('https://doi.org/', '')}</div>
+            </a>` : '';
+        pubItem.innerHTML = `
+            <h3 class="pub-title">${pub.title}</h3>
+            ${authorsHTML}
+            <div class="pub-journal">${pub.journal || '未标明期刊'}</div>
+            ${doiHTML}
+        `;
+        return pubItem;
+    }
+
+    function createEmptyYearNotice() {
+        const notice = document.createElement('div');
+        notice.className = 'no-publications-year';
+        notice.innerHTML = `
+            <svg width="24" height="24" viewBox="0 0 24 24">
+                <path fill="#999" d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-13h2v6h-2zm0 8h2v2h-2z"/>
+            </svg>
+            该年份无发表成果
+        `;
+        return notice;
+    }
+
+    function generateTimeline(groupedData) {
+        const timelineNav = document.getElementById('timelineNav');
+        timelineNav.innerHTML = '';
+        const years = Object.keys(groupedData).sort((a, b) => b - a);
+        if (years.length === 0) return;
+        const counts = years.map(year => groupedData[year].length);
+        const visualMax = Math.max(...counts, 3);
+        years.forEach((year, index) => {
+            const count = groupedData[year].length;
+            const isEmpty = count === 0;
+            const heightPercentage = isEmpty ? 15 : Math.max(20, (count / visualMax) * 70);
+            const yearElement = document.createElement('div');
+            yearElement.className = `timeline-year ${isEmpty ? 'empty' : ''}`;
+            yearElement.dataset.year = year;
+            if (index === 0) yearElement.classList.add('active');
+            yearElement.innerHTML = `
+                <div class="timeline-bar" style="height: ${heightPercentage}%"></div>
+                <div class="timeline-marker"></div>
+                <div class="timeline-year-label">${year}</div>
+                <div class="timeline-count">${count}篇</div>
+            `;
+            yearElement.addEventListener('click', () => scrollToYear(year));
+            timelineNav.appendChild(yearElement);
+        });
+        if (years.length > 5) {
+            const currentYear = new Date().getFullYear();
+            const currentElement = timelineNav.querySelector(`[data-year="${currentYear}"]`);
+            if (currentElement) {
+                timelineNav.scrollLeft = currentElement.offsetLeft - timelineNav.offsetWidth/2 + currentElement.offsetWidth/2;
+            }
+        }
+    }
+    function addBackToTopButton() {
+        const btn = document.createElement('button');
+        btn.id = 'backToTopBtn';
+        btn.innerHTML = '↑ 回到顶部';
+        document.body.appendChild(btn);
+        window.addEventListener('scroll', () => {
+            btn.style.display = window.pageYOffset > 300 ? 'block' : 'none';
+        });
+        btn.addEventListener('click', () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+    }
+
+    function scrollToYear(year) {
+        const yearSection = document.querySelector(`.pub-year[data-year="${year}"]`);
+        if (!yearSection) return;
+        const navbarHeight = document.querySelector('.navbar').offsetHeight || 0;
+        const targetPosition = yearSection.offsetTop - navbarHeight - 20;
+        window.scrollTo({ top: targetPosition, behavior: 'smooth' });
+        document.querySelectorAll('.timeline-year').forEach(item => {
+            item.classList.toggle('active', item.dataset.year === year);
+        });
+    }
+
+    function setupEventListeners() {
+        const hamburger = document.querySelector('.hamburger');
+        const navLinks = document.querySelector('.nav-links');
+        if (hamburger && navLinks) {
+            hamburger.addEventListener('click', () => {
+                navLinks.classList.toggle('active');
+                hamburger.classList.toggle('active');
+            });
+        }
+        window.addEventListener('scroll', () => {
+            updateNavActiveState();
+            animatePublicationsOnScroll();
+            updateActiveYear();
+        });
+        window.addEventListener('resize', () => {
+            generateTimeline(groupPublications);
+            updateActiveYear();
+        });
+    }
+
+    function updateNavActiveState() {
+        document.querySelectorAll('.nav-item').forEach(link => {
+            link.classList.toggle('active', link.href.endsWith('publications.html'));
+        });
+    }
+
+    function animatePublicationsOnScroll() {
+        const items = document.querySelectorAll('.publication-item');
+        const windowHeight = window.innerHeight;
+        items.forEach(item => {
+            const rect = item.getBoundingClientRect();
+            if (rect.top < windowHeight - config.animationOffset) {
+                item.style.opacity = '1';
+                item.style.transform = 'translateY(0)';
+            }
+        });
+    }
+
+    function updateActiveYear() {
+        const yearSections = document.querySelectorAll('.pub-year');
+        const navbarHeight = document.querySelector('.navbar').offsetHeight || 0;
+        let activeYear = null;
+        yearSections.forEach(section => {
+            const rect = section.getBoundingClientRect();
+            if (rect.top < navbarHeight + config.scrollOffset) {
+                activeYear = section.dataset.year;
+            }
+        });
+        if (activeYear) {
+            document.querySelectorAll('.timeline-year').forEach(item => {
+                item.classList.toggle('active', item.dataset.year === activeYear);
+            });
+            const activeElement = document.querySelector(`.timeline-year[data-year="${activeYear}"]`);
+            if (activeElement) {
+                const timeline = document.getElementById('timelineNav');
+                const elementLeft = activeElement.offsetLeft;
+                const timelineWidth = timeline.offsetWidth;
+                const scrollPos = elementLeft - timelineWidth / 2 + activeElement.offsetWidth / 2;
+                timeline.scrollTo({ left: scrollPos, behavior: 'smooth' });
+            }
+        }
+    }
+
+    function showErrorUI(error) {
+        const container = document.getElementById('publicationsContent');
+        container.innerHTML = `
+            <div class="error-container">
+                <h3>⚠️ 数据加载失败</h3>
+                <p>${error.message || '未知错误'}</p>
+                <button class="reload-btn" onclick="location.reload()">重新加载</button>
+            </div>
+        `;
+        document.querySelector('.timeline-container').style.display = 'none';
+    }
+
+    initPublicationsPage();
+});
+</script>
+
+
+</body>
+</html>

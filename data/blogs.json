@@ -1,0 +1,17 @@
+[
+  {
+    "title": "Some basic techniques the lab members might need to know or learn.",
+    "date": "May 2, 2022",
+    "content": "-R software. Basic tutorial (https://www.statmethods.net/r-tutorial/index.html). Or python. -data visualization, such as R ‘ggplot’. -Endnote or other reference management software. -Basic statistics: correlation,lm, glm, gam (‘mgcv’), glmm(‘lme4’), gamm(‘mgcv’). Sometimes, maybe structural equation model(R package ‘piecewiseSem’,spss Amos,…) -Network analysis. Some R packages: igraph, bipartite…\n\nto be continued…\n\nC.Y."
+  },
+  {
+    "title": "Some rules in this lab!",
+    "date": "Mar 1, 2022",
+    "content": "-Stay humble and be polite to your colleagues.\n-Work hard, no matter how smart you think you are.\n-Read many papers and also try your best to publish papers.\n-Please consult me before you make important academic decisions.\n-I will keep pushing you if you are too lazy, and will remind you to balance work-life if I find you feel stressed.\n-Data and codes belong to this lab, and you.\n-I do not know everything, so please challenge me when you have doubts.\n\nto be continued…\n\nC.Y.\n\n"
+  },
+  {
+    "title": "lab website launched!",
+    "date": "Dec 5, 2021",
+    "content": "lab website launched!"
+  }
+]

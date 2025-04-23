@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>实验室博客 | YCLab</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <style>
+        .navbar {
+            top: 0;
+            position: fixed;
+            z-index: 1000;
+            display: flex;
+            height: var(--navbar-height);
+            width: 100%;
+            align-items: center;
+            background-color: rgba(44,62,80,1);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        /* 博客页特有样式 - 与团队成员页风格一致 */
+        .blogs-header {
+            margin-top: 10vh;
+            text-align: center;
+            margin-bottom: 2rem;
+            padding: 0 1.5rem;
+        }
+
+        .blogs-header h1 {
+            font-size: 2.5rem;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+            position: relative;
+            display: inline-block;
+        }
+
+        .blogs-header h1::after {
+            content: "";
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 3px;
+            background: var(--secondary-color);
+        }
+
+        .blogs-header p {
+            color: #666;
+            max-width: 800px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        .blogs-container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 0 1.5rem 3rem;
+        }
+
+        .blog-tabs {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 1.5rem;
+            border-bottom: 1px solid #ddd;
+            flex-wrap: wrap;
+        }
+
+        .tab-btn {
+            padding: 0.8rem 1.5rem;
+            background: none;
+            border: none;
+            border-bottom: 3px solid transparent;
+            cursor: pointer;
+            font-size: 1rem;
+            color: #555;
+            transition: all 0.3s ease;
+            margin: 0 0.5rem;
+        }
+
+        .tab-btn.active {
+            color: var(--primary-color);
+            border-bottom-color: var(--primary-color);
+            font-weight: bold;
+        }
+
+        .blog-list {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        .blog-card {
+            background: #fff;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .blog-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 15px rgba(0,0,0,0.15);
+        }
+
+        .blog-content {
+            padding: 1.5rem;
+        }
+
+        .blog-title {
+            font-size: 1.3rem;
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+        }
+
+        .blog-meta {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 0.8rem;
+            flex-wrap: wrap;
+        }
+
+        .blog-date {
+            color: #666;
+            font-weight: 500;
+        }
+
+        .blog-author {
+            display: inline-block;
+            background: #f0f7ff;
+            color: var(--secondary-color);
+            padding: 0.2rem 0.8rem;
+            border-radius: 4px;
+            font-size: 0.9rem;
+        }
+
+        .blog-text {
+            color: #555;
+            font-size: 0.95rem;
+            line-height: 1.6;
+            white-space: pre-line;
+        }
+
+        .blog-text ul {
+            padding-left: 1.5rem;
+            margin: 1rem 0;
+        }
+
+        .blog-text li {
+            margin-bottom: 0.5rem;
+        }
+
+        .blog-text a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            border-bottom: 1px dotted var(--secondary-color);
+            transition: all 0.2s ease;
+        }
+
+        .blog-text a:hover {
+            color: var(--primary-color);
+            border-bottom-color: var(--primary-color);
+        }
+
+        .no-blogs {
+            text-align: center;
+            padding: 3rem;
+            color: #666;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 2rem;
+            color: #666;
+            font-style: italic;
+        }
+
+        @media (max-width: 768px) {
+            .blogs-header h1 {
+                font-size: 2rem;
+            }
+
+            .blog-content {
+                padding: 1.2rem;
+            }
+
+            .tab-btn {
+                padding: 0.6rem 1rem;
+                font-size: 0.9rem;
+                margin: 0 0.3rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .tab-btn {
+                padding: 0.5rem 0.8rem;
+                margin: 0.2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 导航栏 - 与团队成员页一致 -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="../index.html" class="logo-link">
+                <img src="../images/lab-logo.jpg">
+            </a>
+            <button class="hamburger">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </button>
+            <ul class="nav-links">
+                <li><a href="../index.html" class="nav-item">Home</a></li>
+                <li><a href="news.html" class="nav-item">News</a></li>
+                <li><a href="research.html" class="nav-item">Research</a></li>
+                <li><a href="publications.html" class="nav-item">Publications</a></li>
+                <li><a href="members.html" class="nav-item">Members</a></li>
+                <li><a href="blogs.html" class="nav-item active">Blogs</a></li>
+<!--                <li><a href="contact.html" class="nav-item">Contact</a></li>-->
+            </ul>
+        </div>
+    </nav>
+
+    <!-- 博客内容 -->
+    <main>
+        <div class="blogs-header">
+            <h1>实验室博客</h1>
+        </div>
+
+        <div class="blogs-container">
+            <!-- 博客分类标签 -->
+            <div class="blog-tabs">
+                <button class="tab-btn active" data-tab="all">全部博客</button>
+<!--                <button class="tab-btn" data-tab="technical">技术教程</button>-->
+<!--                <button class="tab-btn" data-tab="research">研究心得</button>-->
+            </div>
+
+            <!-- 博客列表容器 -->
+            <div id="blogsContent">
+                <!-- 内容将通过JavaScript动态加载 -->
+                <div class="loading">加载中...</div>
+            </div>
+        </div>
+    </main>
+
+    <!-- 页脚 - 与团队成员页一致 -->
+    <footer class="footer">
+        <p>&copy; 2025 YCLab. All rights reserved.</p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // 加载博客数据
+            fetch('../data/blogs.json')
+                .then(response => response.json())
+                .then(data => {
+                    const container = document.getElementById('blogsContent');
+                    const tabBtns = document.querySelectorAll('.blog-tabs .tab-btn');
+
+                    // 显示所有博客
+                    displayBlogs(data);
+
+                    // 标签切换功能
+                    tabBtns.forEach(btn => {
+                        btn.addEventListener('click', function() {
+                            // 更新活动标签
+                            tabBtns.forEach(b => b.classList.remove('active'));
+                            this.classList.add('active');
+
+                            const tab = this.dataset.tab;
+                            if (tab === 'all') {
+                                displayBlogs(data);
+                            } else {
+                                displayBlogs(data.filter(blog => blog.category === tab));
+                            }
+                        });
+                    });
+
+                    function displayBlogs(blogs) {
+                        container.innerHTML = '';
+
+                        if (blogs.length === 0) {
+                            container.innerHTML = '<div class="no-blogs">暂无博客内容</div>';
+                            return;
+                        }
+
+                        const list = document.createElement('div');
+                        list.className = 'blog-list';
+
+                        blogs.forEach(blog => {
+                            const blogCard = document.createElement('article');
+                            blogCard.className = 'blog-card';
+
+                            // 处理内容中的链接
+                            let processedContent = blog.content.replace(
+                                /(https?:\/\/[^\s]+)/g,
+                                '<a href="$1" target="_blank" rel="noopener noreferrer">$1</a>'
+                            );
+
+                            // 处理列表项
+                            processedContent = processedContent.replace(/\n-/g, '\n•');
+
+                            blogCard.innerHTML = `
+                                <div class="blog-content">
+                                    <h2 class="blog-title">${blog.title}</h2>
+                                    <div class="blog-meta">
+                                        <span class="blog-date">${blog.date}</span>
+                                        ${blog.author ? `<span class="blog-author">${blog.author}</span>` : ''}
+                                    </div>
+                                    <div class="blog-text">${processedContent}</div>
+                                </div>
+                            `;
+
+                            list.appendChild(blogCard);
+                        });
+
+                        container.appendChild(list);
+                    }
+                })
+                .catch(error => {
+                    console.error('加载博客数据失败:', error);
+                    document.getElementById('blogsContent').innerHTML =
+                        '<div class="no-blogs">无法加载博客内容，请稍后再试。</div>';
+                });
+
+            // 移动端菜单切换
+            const hamburger = document.querySelector('.hamburger');
+            const navLinks = document.querySelector('.nav-links');
+
+            hamburger.addEventListener('click', () => {
+                navLinks.classList.toggle('active');
+                hamburger.classList.toggle('active');
+            });
+
+            // 滚动时导航栏样式变化
+            window.addEventListener('scroll', () => {
+                const navbar = document.querySelector('.navbar');
+                if (window.scrollY > 50) {
+                    navbar.classList.add('scrolled');
+                } else {
+                    navbar.classList.remove('scrolled');
+                }
+            });
+
+            // 设置当前页面导航项激活状态
+            document.querySelectorAll('.nav-item').forEach(item => {
+                if (item.href === window.location.href) {
+                    item.classList.add('active');
+                } else {
+                    item.classList.remove('active');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
