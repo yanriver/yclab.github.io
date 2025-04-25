@@ -24,8 +24,8 @@ function renderNews(news) {
     const container = document.getElementById('news-container');
     container.innerHTML = news.slice(0, 3).map(item => {
         const summary = item.summary || '暂无摘要'; // 处理空值
-        const shortSummary = summary.length > 30 ?
-            summary.slice(0, 30) + '...' :
+        const shortSummary = summary.length > 20 ?
+            summary.slice(0, 20) + '...' :
             summary;
 
         return `
