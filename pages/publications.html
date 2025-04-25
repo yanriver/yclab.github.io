@@ -1,0 +1,703 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>发表成果 | YCLab</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <style>
+        .navbar {
+            top: 0;
+            position: fixed;
+            z-index: 1000;
+            display: flex;
+            height: var(--navbar-height);
+            width: 100%;
+            align-items: center;
+            background-color: rgba(44,62,80,1);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .publications-header {
+            margin-top: 10vh;
+            text-align: center;
+            margin-bottom: 2rem;
+            padding: 0 1.5rem;
+            animation: fadeInDown 0.8s ease-out;
+        }
+
+        .publications-header h1 {
+            font-size: 2.5rem;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+            position: relative;
+            display: inline-block;
+        }
+
+        .publications-header p {
+            color: #666;
+            max-width: 800px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        .publications-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1.5rem 3rem;
+        }
+
+        .timeline-container {
+            margin: 2rem 0 3rem;
+            padding: 1rem 0;
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            position: sticky;
+            top: var(--navbar-height);
+            z-index: 999;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        #timelineNav {
+            display: flex;
+            gap: 8px;
+            padding: 0 15px;
+            min-width: fit-content;
+        }
+
+        .timeline-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            z-index: 1;
+        }
+
+        .timeline {
+            display: flex;
+            height: 100px;
+            align-items: flex-end;
+            position: relative;
+            padding-top: 30px;
+            overflow-x: auto;
+            scrollbar-width: none;
+        }
+
+        .timeline::-webkit-scrollbar {
+            display: none;
+        }
+
+        .timeline-year {
+            position: relative;
+            flex-shrink: 0;
+            width: 67px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            z-index: 2;
+            padding-bottom: 25px;
+        }
+
+        .timeline-bar {
+            width: 25px;
+            margin: 0 auto;
+            background: var(--secondary-color);
+            transition: height 0.6s cubic-bezier(0.4, 0, 0.2, 1),
+                      background-color 0.3s ease;
+        }
+
+        .timeline-year-label {
+            position: absolute;
+            bottom: 0px;
+            left: 0;
+            right: 0;
+            font-size: 0.9rem;
+            color: #666;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .timeline-year:hover {
+            transform: translateY(-3px);
+        }
+
+        .timeline-year:hover .timeline-bar {
+            background: var(--primary-color);
+        }
+
+        .timeline-year.active {
+            transform: translateY(-5px);
+        }
+
+        .timeline-year.active .timeline-bar {
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            box-shadow: 0 4px 12px rgba(52,152,219,0.3);
+        }
+
+        .publications-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .publication-item {
+            background: #fff;
+            border-radius: 8px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            transition: all 0.4s ease;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 0.6s forwards;
+        }
+
+        .pub-year {
+            font-size: 1.5rem;
+            color: var(--primary-color);
+            margin: 2rem 0 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid #eee;
+            display: flex;
+            align-items: center;
+            scroll-margin-top: 100px;
+        }
+
+        .pub-year::before {
+            content: "";
+            display: inline-block;
+            width: 8px;
+            height: 20px;
+            background: var(--secondary-color);
+            margin-right: 10px;
+        }
+
+        .pub-title {
+            font-size: 1.2rem;
+            color: #333;
+            margin-bottom: 0.8rem;
+            font-weight: 600;
+            line-height: 1.4;
+        }
+
+        .pub-authors {
+            color: #555;
+            font-size: 1rem;
+            margin-bottom: 0.8rem;
+            line-height: 1.4;
+        }
+
+        .author-first {
+            font-weight: 600;
+        }
+
+        .author-corresponding {
+            position: relative;
+        }
+
+        .author-corresponding::after {
+            content: "*";
+            font-size: 1.2em;
+            color: var(--secondary-color);
+            position: relative;
+            top: -0.3em;
+        }
+
+        .pub-journal {
+            color: var(--secondary-color);
+            font-size: 1rem;
+            margin-bottom: 0.8rem;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+        }
+
+        .pub-journal::before {
+            content: "📖";
+            margin-right: 0.5rem;
+            font-size: 0.9em;
+        }
+
+        .pub-doi {
+            color: #666;
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .count-tooltip {
+            position: fixed;
+            background: rgba(44,62,80,0.95);
+            color: white;
+            padding: 6px 12px;
+            border-radius: 4px;
+            font-size: 0.85rem;
+            pointer-events: none;
+            transform: translateY(-8px);
+            opacity: 0;
+            animation: tooltipFade 0.3s forwards;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+            z-index: 1000;
+            white-space: nowrap;
+        }
+
+        #backToTopBtn {
+            display: none;
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            z-index: 99;
+            border: none;
+            outline: none;
+            background-color: var(--primary-color);
+            color: white;
+            cursor: pointer;
+            padding: 12px 18px;
+            border-radius: 30px;
+            font-size: 14px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            transition: all 0.3s ease;
+        }
+
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes tooltipFade {
+            from { opacity: 0; transform: translateY(0); }
+            to { opacity: 1; transform: translateY(-8px); }
+        }
+
+        @media (max-width: 768px) {
+            .count-tooltip {
+                display: none;
+            }
+            .timeline {
+            height: 110px;  /* 增加容器高度 */
+            padding-top: 40px;
+            }
+            .timeline-year {
+                width: 50px;
+                padding-bottom: 25px;
+            }
+
+            .timeline-bar {
+                width: 15px;
+            }
+            #timelineNav {
+                gap: 4px;
+                padding: 0 8px;
+            }
+            .publications-header h1 {
+                font-size: 2rem;
+            }
+
+            .pub-year {
+                font-size: 1.3rem;
+            }
+
+            .pub-title {
+                font-size: 1.1rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .timeline {
+                height: 80px;
+            }
+
+            .timeline-year {
+                padding: 0 10px;
+            }
+
+            .timeline-bar {
+                width: 15px;
+            }
+        }
+
+    </style>
+
+</head>
+<body>
+    <!-- 导航栏 - 与主页一致 -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="../index.html" class="logo-link">
+                <img src="../images/lab-logo.jpg" alt="YCLab Logo">
+            </a>
+            <button class="hamburger">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </button>
+            <ul class="nav-links">
+                <li><a href="../index.html" class="nav-item">Home</a></li>
+                <li><a href="news.html" class="nav-item">News</a></li>
+                <li><a href="research.html" class="nav-item">Research</a></li>
+                <li><a href="publications.html" class="nav-item active">Publications</a></li>
+                <li><a href="members.html" class="nav-item">Members</a></li>
+                <li><a href="blogs.html" class="nav-item">Blogs</a></li>
+<!--                <li><a href="contact.html" class="nav-item">Contact</a></li>-->
+            </ul>
+        </div>
+    </nav>
+
+    <!-- 发表成果内容 -->
+    <main>
+        <div class="publications-header">
+            <h1>发表成果</h1>
+            <p>实验室在生态领域发表的学术论文</p>
+        </div>
+
+        <div class="publications-container">
+
+            <div class="timeline-container">
+                <div class="gradient-line"></div>
+                <div class="timeline" id="timelineNav"></div>
+                <div class="timeline-line"></div>
+            </div>
+
+
+            <!-- 发表成果列表容器 -->
+            <div id="publicationsContent">
+                <div class="loading">加载中...</div>
+            </div>
+        </div>
+    </main>
+
+    <!-- 页脚 - 与主页一致 -->
+    <footer class="footer">
+        <p>&copy; 2025 YCLab. All rights reserved.</p>
+    </footer>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const config = {
+        primaryColor: '#2c3e50',
+        secondaryColor: '#3498db',
+        animationOffset: 100,
+        scrollOffset: 150,
+        dataPaths: ['../data/publications.json', './data/publications.json', 'publications.json'],
+        tooltip: {
+            showDelay: 300,
+            hideDelay: 200
+        }
+    };
+
+    let activeTooltip = null;
+    let tooltipTimeout = null;
+
+    async function initPublicationsPage() {
+        try {
+            // 样式初始化
+            document.documentElement.style.setProperty('--primary-color', config.primaryColor);
+            document.documentElement.style.setProperty('--secondary-color', config.secondaryColor);
+
+            // 数据加载与处理
+            const data = await loadPublicationsData();
+            const yearRange = getYearRange(data);
+            const publicationsByYear = groupPublications(data, yearRange);
+
+            // 页面渲染
+            renderPublications(publicationsByYear);
+            generateTimeline(publicationsByYear);
+            setupYearActivation(publicationsByYear);
+            addBackToTopButton();
+            setupEventListeners();
+            animatePublicationsOnScroll();
+        } catch (error) {
+            showErrorUI(error);
+        }
+    }
+
+    async function loadPublicationsData() {
+        let lastError = null;
+        for (const path of config.dataPaths) {
+            try {
+                const response = await fetch(path);
+                if (!response.ok) throw new Error(`HTTP error: ${response.status}`);
+                const data = await response.json();
+                const validData = data.filter(item =>
+                    item.title && item.year && !isNaN(parseInt(item.year))
+                );
+                if (validData.length === 0) throw new Error('No valid publications');
+                return validData;
+            } catch (error) {
+                lastError = error;
+                console.warn(`Failed to load from ${path}:`, error);
+            }
+        }
+        throw lastError || new Error('All data sources failed');
+    }
+
+    function getYearRange(data) {
+        const years = data.map(item => parseInt(item.year)).filter(year => !isNaN(year));
+        return years.length ?
+            [Math.max(...years), Math.min(...years)] :
+            [new Date().getFullYear()];
+    }
+
+    function groupPublications(data, yearRange) {
+        const grouped = {};
+        for (let year = yearRange[0]; year >= yearRange[1]; year--) {
+            grouped[year] = data.filter(p => parseInt(p.year) === year);
+        }
+        return grouped;
+    }
+
+    function renderPublications(groupedData) {
+        const container = document.getElementById('publicationsContent');
+        container.innerHTML = Object.keys(groupedData)
+            .sort((a, b) => b - a)
+            .map(year => createYearSection(year, groupedData[year]))
+            .join('');
+    }
+
+    function createYearSection(year, publications) {
+        return `
+            <div class="year-section">
+                <h2 class="pub-year" data-year="${year}" id="year-${year}">
+                    ${year}
+                </h2>
+                <div class="publications-list">
+                    ${publications.length ?
+                        publications.map((pub, index) => createPublicationItem(pub, index)).join('') :
+                        '<div class="no-publications-year">该年份无发表成果</div>'
+                    }
+                </div>
+            </div>
+        `;
+    }
+
+    function createPublicationItem(pub, index) {
+        return `
+            <div class="publication-item" style="animation-delay: ${index * 0.1}s">
+                <h3 class="pub-title">${pub.title}</h3>
+                ${pub.author ? `<div class="pub-authors">${formatAuthors(pub.author)}</div>` : ''}
+                <div class="pub-journal">${pub.journal || '未标明期刊'}</div>
+                ${pub.doi ? `
+                    <a href="${pub.doi}" class="pub-doi">
+                        DOI: ${pub.doi.replace('https://doi.org/', '')}
+                    </a>
+                ` : ''}
+            </div>
+        `;
+    }
+
+    function formatAuthors(authorsStr) {
+        return authorsStr.split(', ')
+            .map(author => {
+                let html = author;
+                if (author.includes('#')) {
+                    html = `<span class="author-first">${author.replace('#', '')}</span>`;
+                }
+                if (author.includes('*')) {
+                    html = `<span class="author-corresponding">${html.replace('*', '')}</span>`;
+                }
+                return html;
+            })
+            .join(', ');
+    }
+
+    function generateTimeline(groupedData) {
+        const timeline = document.getElementById('timelineNav');
+        const years = Object.keys(groupedData).sort((a, b) => b - a);
+        const visualMax = Math.max(...Object.values(groupedData).map(arr => arr.length), 3);
+
+        timeline.innerHTML = years.map(year => createTimelineYear(year, groupedData[year], visualMax)).join('');
+
+        // 使用事件委托处理交互
+        timeline.addEventListener('mouseover', handleTimelineHover);
+        timeline.addEventListener('mouseout', handleTimelineLeave);
+        timeline.addEventListener('click', handleTimelineClick);
+    }
+
+    function createTimelineYear(year, publications, visualMax) {
+        const count = publications.length;
+        const height = count ? count * 10 : 0;
+        return `
+            <div class="timeline-year" data-year="${year}" data-count="${count}">
+                <div class="timeline-bar" style="height: ${height}px"></div>
+                <div class="timeline-year-label">${year}</div>
+            </div>
+        `;
+    }
+
+    function handleTimelineHover(e) {
+        if (window.innerWidth <= 768) return;
+
+        const yearElement = e.target.closest('.timeline-year');
+        if (!yearElement) return;
+
+        clearTimeout(tooltipTimeout);
+        tooltipTimeout = setTimeout(() => {
+            showTooltip(yearElement);
+        }, config.tooltip.showDelay);
+    }
+
+    function handleTimelineLeave(e) {
+        clearTimeout(tooltipTimeout);
+        if (activeTooltip) {
+            activeTooltip.remove();
+            activeTooltip = null;
+        }
+    }
+
+    function showTooltip(element) {
+        if (activeTooltip) activeTooltip.remove();
+
+        activeTooltip = document.createElement('div');
+        activeTooltip.className = 'count-tooltip';
+        activeTooltip.textContent = `${element.dataset.count}篇`;
+        document.body.appendChild(activeTooltip);
+
+        const rect = element.getBoundingClientRect();
+        activeTooltip.style.left = `${rect.left + rect.width / 2 - activeTooltip.offsetWidth / 2}px`;
+        activeTooltip.style.top = `${rect.top - 35}px`;
+    }
+
+    function handleTimelineClick(e) {
+        const yearElement = e.target.closest('.timeline-year');
+        if (!yearElement) return;
+
+        const year = yearElement.dataset.year;
+        scrollToYear(year);
+    }
+
+    function scrollToYear(year) {
+        const targetSection = document.querySelector(`.pub-year[data-year="${year}"]`);
+        if (!targetSection) return;
+
+        const navbar = document.querySelector('.navbar');
+        const navbarHeight = navbar ? navbar.offsetHeight : 0;
+        const targetPosition = targetSection.offsetTop - navbarHeight - 20;
+
+        window.scrollTo({
+            top: targetPosition,
+            behavior: 'smooth'
+        });
+    }
+
+    function setupYearActivation() {
+        const observer = new IntersectionObserver(entries => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const year = entry.target.dataset.year;
+                    updateActiveYear(year);
+                }
+            });
+        }, {
+            rootMargin: '-40% 0px -40% 0px',
+            threshold: 0.1
+        });
+
+        document.querySelectorAll('.pub-year').forEach(section => observer.observe(section));
+    }
+
+    function updateActiveYear(year) {
+        document.querySelectorAll('.timeline-year').forEach(el => {
+            el.classList.toggle('active', el.dataset.year === year);
+        });
+        history.replaceState(null, '', `#year-${year}`);
+    }
+
+    function addBackToTopButton() {
+        const btn = document.createElement('button');
+        btn.id = 'backToTopBtn';
+        btn.textContent = '↑ 回到顶部';
+        document.body.appendChild(btn);
+
+        btn.addEventListener('click', () => {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+
+        window.addEventListener('scroll', () => {
+            btn.style.display = window.pageYOffset > 300 ? 'block' : 'none';
+        });
+    }
+
+    function setupEventListeners() {
+        // 移动端菜单切换
+        const hamburger = document.querySelector('.hamburger');
+        const navLinks = document.querySelector('.nav-links');
+        if (hamburger && navLinks) {
+            hamburger.addEventListener('click', () => {
+                navLinks.classList.toggle('active');
+                hamburger.classList.toggle('active');
+            });
+        }
+
+        // 窗口大小变化处理
+        window.addEventListener('resize', () => {
+            if (activeTooltip) {
+                activeTooltip.remove();
+                activeTooltip = null;
+            }
+        });
+
+        // 滚动事件处理
+        window.addEventListener('scroll', () => {
+            animatePublicationsOnScroll();
+            updateActiveYearOnScroll();
+        });
+    }
+
+    function animatePublicationsOnScroll() {
+        const windowHeight = window.innerHeight;
+        document.querySelectorAll('.publication-item').forEach(item => {
+            const rect = item.getBoundingClientRect();
+            if (rect.top < windowHeight - config.animationOffset) {
+                item.style.opacity = '1';
+                item.style.transform = 'translateY(0)';
+            }
+        });
+    }
+
+    function updateActiveYearOnScroll() {
+        const sections = Array.from(document.querySelectorAll('.pub-year'));
+        const scrollPosition = window.pageYOffset + (document.querySelector('.navbar')?.offsetHeight || 0);
+
+        for (const section of sections) {
+            const sectionTop = section.offsetTop;
+            const sectionBottom = sectionTop + section.offsetHeight;
+
+            if (scrollPosition >= sectionTop && scrollPosition < sectionBottom) {
+                updateActiveYear(section.dataset.year);
+                break;
+            }
+        }
+    }
+
+    function showErrorUI(error) {
+        const container = document.getElementById('publicationsContent');
+        container.innerHTML = `
+            <div class="error-container">
+                <h3>⚠️ 数据加载失败</h3>
+                <p>${error.message || '未知错误'}</p>
+                <button class="reload-btn" onclick="location.reload()">重新加载</button>
+            </div>
+        `;
+        document.querySelector('.timeline-container').style.display = 'none';
+    }
+
+    // 初始化页面
+    initPublicationsPage();
+});
+
+
+</script>
+
+
+</body>
+</html>
