@@ -373,6 +373,9 @@ body {
         margin-top: 0.5rem;
         display: block;
     }
+    .dual-column{
+        padding: 0.5rem;
+    }
 }
 
 .research-section {
