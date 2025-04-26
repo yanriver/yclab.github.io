@@ -344,13 +344,18 @@
         }
 
         @media (max-width: 480px) {
-            .tab-btn {
-                padding: 0.5rem 0.8rem;
-                margin: 0.2rem;
+            .member-list {
+                grid-template-columns: 1fr !important;
+                gap: 2rem;
             }
 
-            .member-degree-grade {
-                gap: 0.5rem;
+            .member-card {
+                height: auto;
+                min-height: 400px;
+            }
+
+            .member-image {
+                height: 250px;
             }
         }
     </style>

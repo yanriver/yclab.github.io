@@ -171,8 +171,7 @@ body {
   max-width: 600px; /* 控制内容区域最大宽度 */
   width: 100%; /* 默认宽度占比 */
   padding-right: 10%; /* 左侧留白 */
-
-  /* 安全边界（适配移动端） */
+    
   @media (max-width: 768px) {
     width: 85%;
     padding-left: 5%;
@@ -188,24 +187,19 @@ body {
     line-height: 1.6;
     margin-bottom: 1em ;
 }
-/* 标题样式 */
 .lab-title {
   font-size: 2.5rem;
   line-height: 1.3;
   margin-bottom: 1.5rem;
-
-  /* 文字换行保护 */
+    
   word-wrap: break-word;
-  overflow-wrap: anywhere; /* 更智能的换行策略 */
+  overflow-wrap: anywhere;
 }
-/* 简介列表容器 */
 .intro-list {
   line-height: 1.6;
-  /* 自动换行保障 */
   white-space: normal !important;
   word-break: break-word;
 }
-/* 双栏布局 */
 .dual-column {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -221,7 +215,6 @@ body {
     }
 }
 
-/* 新增卡片样式 */
 .card {
     background: #fff;
     border-radius: 12px;
@@ -239,13 +232,12 @@ body {
     box-shadow: 0 8px 12px rgba(0, 0, 0, 0.15);
 }
 
-/* 调整双栏间距 */
+
 .dual-column {
     gap: 2.5rem;
     padding: 2rem 1.5rem;
 }
 
-/* 标题样式 */
 .section-title {
     color: var(--primary-color);
     font-size: 1.5rem;
@@ -256,10 +248,10 @@ body {
 
 .card-header {
   display: flex;
-  justify-content: space-between; /* 标题和箭头分居两侧 */
+  justify-content: space-between;
   align-items: center;
-  padding: 15px 20px; /* 调整内边距 */
-  border-bottom: 1px solid #eee; /* 可选分隔线 */
+  padding: 15px 20px;
+  border-bottom: 1px solid #eee;
 }
 
 .more-link {
@@ -269,7 +261,7 @@ body {
     transition: 0.3s;
 }
 
-/* 内容列表样式 */
+
 .news-list, .pub-list {
     display: flex;
     flex-direction: column;
@@ -283,7 +275,6 @@ body {
     min-height: 0;
 }
 
-/* 列表项样式 */
 .index-news-item {
     display: flex;
     gap: 20px;
@@ -291,6 +282,7 @@ body {
     padding: 15px;
     border-bottom: 1px solid rgba(0,0,0,0.1);
 }
+
 .index-news-content {
     flex: 1;
 }
@@ -310,12 +302,6 @@ body {
     background: #e9ecef;
 }
 
-/*.pub-item {*/
-/*    padding: 1rem;*/
-/*    background: #f8f9fa;*/
-/*    border-radius: 8px;*/
-/*    transition: background 0.3s ease;*/
-/*}*/
 
 .pub-item {
     display: flex;
@@ -327,11 +313,33 @@ body {
 .pub-content {
     flex: 1;
 }
-/* 响应式调整 */
+@media (max-width: 1080px) {
+    .index-news-content p {
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        line-height: 1.4;
+        max-height: 4.5em;
+    }
+}
 @media (max-width: 768px) {
+    .index-news-content p {
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        line-height: 1.4;
+        max-height: 3em;
+    }
+}
+
+@media (max-width: 550px) {
     .card {
-        padding: 1.5rem;
-        margin: 0 1rem;
+        padding: 0rem;
+        margin: 0 0rem;
     }
 
     .section-title {
@@ -341,42 +349,41 @@ body {
     .dual-column {
         gap: 2rem;
     }
+    .index-news-item {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0px;
+        min-height: unset !important;
+    }
+    .index-news-item p {
+        display: none !important;
+    }
+    .index-news-img img {
+        width: 100%;
+    }
+    .index-news-content {
+        order: -1;
+        padding-bottom: 1rem;
+    }
+    .index-news-content time {
+        font-size: 0.9em;
+        color: #666;
+    }
+    .index-news-content time {
+        margin-top: 0.5rem;
+        display: block;
+    }
+    .dual-column{
+        padding: 0.5rem;
+    }
 }
 
-
-
-/*!* 研究方向网格 *!*/
-/*.research-section {*/
-/*    max-width: calc(100% - 3rem); !* 与双栏的左右 padding 对齐 *!*/
-/*    margin: 0 auto;               !* 居中 *!*/
-/*    padding: 0 1.5rem;            !* 与双栏的 padding 一致 *!*/
-/*}*/
-
-/*.research-grid {*/
-/*    background: #fff;*/
-/*    border-radius: 12px;*/
-/*    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);*/
-/*    padding: 2rem;*/
-/*    transition: transform 0.3s ease, box-shadow 0.3s ease;*/
-/*    width: 100%;                  !* 占满父容器宽度 *!*/
-/*}*/
-
-/*.research-grid:hover {*/
-/*    transform: translateY(-5px);*/
-/*    box-shadow: 0 8px 12px rgba(0, 0, 0, 0.15);*/
-/*}*/
-
-/*.dual-column, .research-section {*/
-/*    box-sizing: border-box;       !* 防止 padding 影响宽度计算 *!*/
-/*}*/
-/* 研究方向容器（宽度与双栏一致） */
 .research-section {
-    max-width: calc(100% - 3rem); /* 与双栏的左右 padding 对齐 */
+    max-width: calc(100% - 3rem);
     margin: 0 auto;
-    padding: 0 1.5rem;           /* 与双栏的 padding 一致 */
+    padding: 0 1.5rem;
 }
 
-/* 横向小卡片网格布局 */
 .research-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));

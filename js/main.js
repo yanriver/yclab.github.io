@@ -23,17 +23,12 @@ document.addEventListener('DOMContentLoaded', () => {
 function renderNews(news) {
     const container = document.getElementById('news-container');
     container.innerHTML = news.slice(0, 3).map(item => {
-        const summary = item.summary || '暂无摘要'; // 处理空值
-        const shortSummary = summary.length > 100 ?
-            summary.slice(0, 100) + '...' :
-            summary;
-
         return `
             <article class="index-news-item">
                 <div class="index-news-content">
                     <h3>${item.title}</h3>
                     <time>${item.date}</time>
-                    <p>${shortSummary}</p>
+                    <p class="news-summary">${item.summary || '暂无摘要'}</p>
                 </div>  
                 <div class="index-news-img">
                     <img src="${item.image}" width="120" alt="news" />
@@ -42,6 +37,7 @@ function renderNews(news) {
         `;
     }).join('');
 }
+
 
 function renderPublications(pubs) {
     const container = document.getElementById('pubs-container');
