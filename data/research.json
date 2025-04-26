@@ -2,12 +2,12 @@
 
     {
         "title": "生态网络实地调查与监测",
-        "description": "我们希望尽可能真实地了解自然界生物之间的相互关系，这包括多种多样的种间互作，如“谁吃谁”，“谁给谁传粉”，“谁帮谁传播种子”，“谁寄生谁”等。为了达到这个目标，我们在草地、森林、荒漠中细致地观测植物与动物之间的互作关系，采集样品，设计实验，试图描绘真实的生态互作网络。\nWe aim to understand the intricate relationships among organisms in nature as authentically as possible, encompassing diverse interspecific interactions such as 'who eats whom','who pollinates whom','who helps whom disperse seeds' and 'who parasitizes whom'. To achieve this, we conduct observations of plant-animal interactions in grasslands, forests, and deserts, collecting samples and designing experiments to map out realistic ecological interaction networks.",
+        "description": "我们希望尽可能真实地了解自然界生物之间的相互关系，这包括多种多样的种间互作，如“谁吃谁”，“谁给谁传粉”，“谁帮谁传播种子”，“谁寄生谁”等。为了达到这个目标，我们在草地、森林、荒漠中细致地观测植物与动物之间的互作关系，采集样品，设计实验，试图描绘真实的生态互作网络。<br>We aim to understand the intricate relationships among organisms in nature as authentically as possible, encompassing diverse interspecific interactions such as 'who eats whom','who pollinates whom','who helps whom disperse seeds' and 'who parasitizes whom'. To achieve this, we conduct observations of plant-animal interactions in grasslands, forests, and deserts, collecting samples and designing experiments to map out realistic ecological interaction networks.",
         "image": "../images/research/草地.jpg"
     },
     {
         "title": "生态网络数据挖掘与分析",
-        "description": "基于我们自己观测所得，或得益于国内外野外研究人员积累并公开的动植物互作网络数据，以及复杂网络科学的加持，我们希望通过网络分析方法去探讨动植物互作网络的结构与功能、演化机制、时空动态的联系，揭示与预测气候变化、人类活动影响下自然界动植物生态互作网络的变化规律。\nBuilding upon our own field observations, as well as open-access plant-animal interaction network data accumulated by researchers worldwide, and empowered by complex network science, we employ network analysis methods to investigate the structure, function, evolutionary mechanisms, and spatiotemporal dynamics of species interaction networks. Our goal is to uncover and predict how ecological interaction networks and biodiversity respond to climate change and human activities.",
+        "description": "基于我们自己观测所得，或得益于国内外野外研究人员积累并公开的动植物互作网络数据，以及复杂网络科学的加持，我们希望通过网络分析方法去探讨动植物互作网络的结构与功能、演化机制、时空动态的联系，揭示与预测气候变化、人类活动影响下自然界动植物生态互作网络的变化规律。<br>Building upon our own field observations, as well as open-access plant-animal interaction network data accumulated by researchers worldwide, and empowered by complex network science, we employ network analysis methods to investigate the structure, function, evolutionary mechanisms, and spatiotemporal dynamics of species interaction networks. Our goal is to uncover and predict how ecological interaction networks and biodiversity respond to climate change and human activities.",
         "image": "../images/research/旱地.jpg"
     },
 	{
