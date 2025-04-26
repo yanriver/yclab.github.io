@@ -12,7 +12,7 @@
     },
 	{
         "title": "生态网络理论探索",
-        "description": "结合理论模型与现实数据，通过数学模型和计算机模拟，我们亦希望通过挖掘与开发新的网络结构指标，探索以往生态网络研究中被忽视或未知的结构特征，并理解它们对功能与稳定性的影响。<br>Integrating theoretical models with empirical data, we employ mathematical modeling and computer simulations to develop novel network structural metrics. Our goal is to uncover previously overlooked or unknown architectural features in ecological networks and elucidate their impacts on ecosystem functioning and stability.",
+        "description": "基于生态网络的理论模型与真实监测数据，采用数学模型、计算机模拟、机器学习等方法，我们希望通过挖掘或开发新的网络结构指标，提出新的分析框架，探索以往生态网络研究中被忽视或未知的结构特征，从而深入理解生态网络的复杂性及其对生态系统功能与稳定性的影响。<br>Building upon theoretical models of ecological networks and empirical monitoring data, we employ mathematical modeling, computational simulations, and machine learning techniques to develop innovative network metrics and establish novel analytical frameworks. Our research seeks to uncover previously neglected or unknown structural patterns in ecological networks, ultimately providing deeper insights into network complexity and its implications for ecosystem functioning and stability.",
         "image": "../images/research/理论生态学图.jpg"
     }
 ]
