@@ -432,109 +432,15 @@ body {
 }
 
 /* 响应式调整 */
-@media (max-width: 768px) {
+@media (max-width: 550px) {
     .research-grid {
         grid-template-columns: 1fr; /* 移动端单列 */
     }
-}
-/* 联系栏目容器 */
-.contact-section {
-    max-width: calc(100% - 3rem);
-    margin: 2rem auto;
-    padding: 0 1.5rem;
-}
-
-.contact-container {
-    background: #fff;
-    border: 1px solid rgba(0, 0, 0, 0.5);
-    border-radius: 12px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    overflow: hidden;
-}
-
-/* 表单布局（横向排列，小屏幕纵向） */
-.contact-form {
-    display: flex;
-    flex-wrap: wrap;
-}
-
-.form-fields {
-    flex: 1;
-    min-width: 280px;
-    padding: 1.5rem;
-}
-
-.contact-info {
-    flex: 0 0 300px;
-    padding: 1.5rem;
-    border-radius: 12px;
-    /*background: var(--secondary-color); !* 浅色背景区分 *!*/
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-}
-
-/* 输入框样式 */
-.form-input, .form-textarea {
-    width: 100%;
-    padding: 0.75rem;
-    margin-bottom: 1rem;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    font-size: 1rem;
-    transition: border-color 0.3s;
-}
-
-.form-input:focus, .form-textarea:focus {
-    border-color: var(--secondary-color);
-    outline: none;
-}
-
-.form-textarea {
-    resize: vertical;
-    min-height: 120px;
-}
-
-/* 右侧信息区域 */
-.info-title {
-    color: var(--secondary-color);
-    margin-bottom: 1rem;
-}
-
-.info-description {
-    color: #666;
-    line-height: 1.6;
-    margin-bottom: 1.5rem;
-}
-
-/* 提交按钮 */
-.submit-button {
-    background: var(--secondary-color);
-    color: white;
-    border: 1px solid rgba(0, 0, 0, 0.5);
-    padding: 0.75rem 1.5rem;
-    border-radius: 8px;
-    font-size: 1rem;
-    cursor: pointer;
-    transition: background 0.3s;
-}
-
-.submit-button:hover {
-    background: var(--secondary-color); /* 深色悬停效果 */
-}
-
-/* 响应式调整 */
-@media (max-width: 768px) {
-    .contact-form {
-        flex-direction: column;
-    }
-    .contact-info {
-        flex: 1;
+    .research-section{
+        padding: 0 0;
+        margin: 0 0;
     }
 }
-
-
-/* 页脚 */
 .footer {
     /*position: fixed;*/
     background: var(--primary-color);
