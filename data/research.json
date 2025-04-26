@@ -1,17 +1,18 @@
 [
+
     {
-        "title": "生态网络理论",
-        "description": "通过数学模型和计算机模拟，研究生态网络结构、功能及动态。",
-        "image": "../images/research/理论生态学图.jpg"
-    },
-    {
-        "title": "草地生物互作网络",
-        "description": "研究草地生态系统中不同物种之间的相互关系及其对生态功能的影响。",
+        "title": "生态网络实地调查与监测",
+        "description": "我们希望尽可能真实地了解自然界生物之间的相互关系，这包括多种多样的种间互作，如“谁吃谁”，“谁给谁传粉”，“谁帮谁传播种子”，“谁寄生谁”等。为了达到这个目标，我们在草地、森林、荒漠中细致地观测植物与动物之间的互作关系，采集样品，设计实验，试图描绘真实的生态互作网络。\nWe aim to understand the intricate relationships among organisms in nature as authentically as possible, encompassing diverse interspecific interactions such as 'who eats whom','who pollinates whom','who helps whom disperse seeds' and 'who parasitizes whom'. To achieve this, we conduct observations of plant-animal interactions in grasslands, forests, and deserts, collecting samples and designing experiments to map out realistic ecological interaction networks.",
         "image": "../images/research/草地.jpg"
     },
     {
-        "title": "旱地生物互作网络",
-        "description": "研究干旱环境中植物、动物及微生物之间的相互作用。",
+        "title": "生态网络数据挖掘与分析",
+        "description": "基于我们自己观测所得，或得益于国内外野外研究人员积累并公开的动植物互作网络数据，以及复杂网络科学的加持，我们希望通过网络分析方法去探讨动植物互作网络的结构与功能、演化机制、时空动态的联系，揭示与预测气候变化、人类活动影响下自然界动植物生态互作网络的变化规律。\nBuilding upon our own field observations, as well as open-access plant-animal interaction network data accumulated by researchers worldwide, and empowered by complex network science, we employ network analysis methods to investigate the structure, function, evolutionary mechanisms, and spatiotemporal dynamics of species interaction networks. Our goal is to uncover and predict how ecological interaction networks and biodiversity respond to climate change and human activities.",
         "image": "../images/research/旱地.jpg"
+    },
+	{
+        "title": "生态网络理论探索",
+        "description": "结合理论模型与现实数据，通过数学模型和计算机模拟，我们亦希望通过挖掘与开发新的网络结构指标，探索以往生态网络研究中被忽视或未知的结构特征，并理解它们对功能与稳定性的影响。\nIntegrating theoretical models with empirical data, we employ mathematical modeling and computer simulations to develop novel network structural metrics. Our goal is to uncover previously overlooked or unknown architectural features in ecological networks and elucidate their impacts on ecosystem functioning and stability.",
+        "image": "../images/research/理论生态学图.jpg"
     }
 ]
