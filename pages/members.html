@@ -541,12 +541,6 @@
                 max-width: 400px;
                 margin: 0 auto;
             }
-
-            .network-info-panel {
-                max-width: 80vw;  /* 这里修改宽度，比如改为 90vw 或 70vw */
-                max-height: 80vh;
-                padding: 15px;
-            }
         }
         
         @media (max-width: 768px) {
@@ -997,8 +991,8 @@
                         let content = "";
                         
                         if (type === "node") {
-                            const statusText = d.status === "fixed" ? "导师" : 
-                                             d.status === "active" ? "当前成员" : "已毕业成员";
+                            const statusText = data.status === "fixed" ? "导师" : 
+                                             data.status === "active" ? "当前成员" : "已毕业成员";
                             
                             content = `
                                 <h3>${data.name}</h3>
@@ -1213,5 +1207,3 @@
     </script>
 </body>
 </html>
-
-
