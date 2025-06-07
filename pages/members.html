@@ -650,7 +650,7 @@
     <main>
         <div class="members-header">
             <h1>团队成员</h1>
-            <p>我们是一个由博士生、硕士生和本科生组成的多元化研究团队，致力于生态互作网络和动植物关系研究</p>
+            <p>我们是一个由博士后、博士生、硕士生和本科生组成的多元化研究团队，致力于生态互作网络和动植物关系研究</p>
         </div>
 
         <div class="supervisor-section">
@@ -710,6 +710,10 @@
                         <div class="legend-item">
                             <div class="legend-circle" style="background-color:#2c3e50"></div>
                             <span>导师</span>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-circle" style="background-color:#9b59b6"></div>
+                            <span>博士后</span>
                         </div>
                         <div class="legend-item">
                             <div class="legend-circle" style="background-color:#3498db"></div>
@@ -777,7 +781,9 @@
                         return;
                     }
                     
+                    // 添加博士后类别，并按学术层次排序
                     const groupedMembers = {
+                        '博士后': members.filter(m => m.degree === '博士后'),
                         '博士': members.filter(m => m.degree === '博士'),
                         '硕士': members.filter(m => m.degree === '硕士'),
                         '本科': members.filter(m => m.degree === '本科')
@@ -789,7 +795,7 @@
                         section.className = 'degree-section';
                         const title = document.createElement('h2');
                         title.className = 'degree-title';
-                        title.textContent = `${degree}生`;
+                        title.textContent = degree === '博士后' ? '博士后' : `${degree}生`;
                         const list = document.createElement('div');
                         list.className = 'member-list';
                         
@@ -821,7 +827,7 @@
                                     <h3 class="member-name">${member.name}</h3>
                                     <div class="member-degree-grade">
                                         <span class="member-degree">${member.degree}</span>
-                                        <span class="member-grade">${member.grade}</span>
+                                        <span class="member-grade">${member.grade || ''}</span>
                                     </div>
                                     ${emailContent}
                                     ${interestContent}
@@ -1119,6 +1125,7 @@
                         .attr("r", d => Math.max(15, Math.sqrt(Math.max(1, d.value)) * 4))
                         .attr("fill", d => {
                             if (d.status === "fixed") return "#2c3e50";
+                            if (d.degree === "博士后") return "#9b59b6"; // 为博士后添加紫色
                             if (d.status === "active") return "#3498db";
                             if (d.status === "graduated") return "#e74c3c";
                             return "#3498db";
