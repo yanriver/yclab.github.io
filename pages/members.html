@@ -358,6 +358,110 @@
                 height: 250px;
             }
         }
+        .network-container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 1.5rem;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            border: 1px solid rgba(0, 0, 0, 0.5);
+        }
+        
+        .network-header {
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+        
+        .network-header h2 {
+            font-size: 1.8rem;
+            color: var(--primary-color);
+            position: relative;
+            display: inline-block;
+            padding-bottom: 10px;
+        }
+        
+        .network-header h2::after {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 3px;
+            background: var(--secondary-color);
+        }
+        
+        .network-description {
+            color: #666;
+            max-width: 800px;
+            margin: 0 auto 1.5rem;
+            line-height: 1.6;
+            text-align: center;
+        }
+        
+        #member-network {
+            width: 100%;
+            height: 600px;
+            border: 1px solid #eee;
+            border-radius: 4px;
+            overflow: hidden;
+            background-color: #f9f9f9;
+        }
+        
+        .node {
+            fill: var(--primary-color);
+            stroke: #fff;
+            stroke-width: 2px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .node:hover {
+            fill: var(--secondary-color);
+            transform: scale(1.1);
+        }
+        
+        .node-label {
+            font-size: 12px;
+            text-anchor: middle;
+            pointer-events: none;
+            fill: #333;
+            font-weight: bold;
+        }
+        
+        .link {
+            stroke: #999;
+            stroke-opacity: 0.6;
+        }
+        
+        .network-legend {
+            display: flex;
+            justify-content: center;
+            margin-top: 1rem;
+            gap: 2rem;
+            flex-wrap: wrap;
+        }
+        
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .legend-circle {
+            width: 15px;
+            height: 15px;
+            border-radius: 50%;
+            background-color: var(--primary-color);
+        }
+        
+        .legend-line {
+            width: 30px;
+            height: 2px;
+            background-color: #999;
+            margin: 0 0.5rem;
+        }
     </style>
 </head>
 <body>
@@ -422,12 +526,34 @@
             <div class="member-tabs">
                 <button class="tab-btn active" data-tab="current">当前成员</button>
                 <button class="tab-btn" data-tab="alumni">已毕业成员</button>
+                <button class="tab-btn" data-tab="network">成员合作网络</button>	
             </div>
 
             <!-- 成员列表容器 -->
             <div id="membersContent">
                 <!-- 内容将通过JavaScript动态加载 -->
                 <div class="loading">加载中...</div>
+            </div>
+            <div id="networkContent" style="display: none;">
+                <div class="network-container">
+                    <div class="network-header">
+                        <h2>成员合作网络</h2>
+                    </div>
+                    <p class="network-description">
+                        成员合作网络
+                    </p>
+                    <div id="member-network"></div>
+                    <div class="network-legend">
+                        <div class="legend-item">
+                            <div class="legend-circle"></div>
+                            <span>节点大小：论文数量</span>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-line"></div>
+                            <span>连线粗细：合作强度</span>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </main>
@@ -436,126 +562,318 @@
     <footer class="footer">
         <p>&copy; 2025 YCLab. All rights reserved.</p>
     </footer>
-
-    <script>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+	<script>
         document.addEventListener('DOMContentLoaded', function() {
             // 加载成员数据
-            fetch('../data/members.json')
-                .then(response => response.json())
-                .then(data => {
-                    const container = document.getElementById('membersContent');
-                    const tabBtns = document.querySelectorAll('.tab-btn');
-
-                    // 显示当前成员
-                    displayMembers(data.filter(member => member.status === 'active'));
-
-                    // 标签切换功能
-                    tabBtns.forEach(btn => {
-                        btn.addEventListener('click', function() {
-                            // 更新活动标签
-                            tabBtns.forEach(b => b.classList.remove('active'));
-                            this.classList.add('active');
-
-                            const tab = this.dataset.tab;
-                            if (tab === 'current') {
-                                displayMembers(data.filter(member => member.status === 'active'));
-                            } else {
-                                displayMembers(data.filter(member => member.status === 'graduated'));
+            Promise.all([
+                fetch('../data/members.json').then(res => res.json()),
+                fetch('../data/publications.json').then(res => res.json())
+            ])
+            .then(([membersData, publicationsData]) => {
+                const container = document.getElementById('membersContent');
+                const networkContainer = document.getElementById('networkContent');
+                const tabBtns = document.querySelectorAll('.tab-btn');
+                // 显示当前成员
+                displayMembers(membersData.filter(member => member.status === 'active'));
+                
+                // 构建成员网络数据
+                const networkData = buildNetworkData(membersData, publicationsData);
+                // 标签切换功能
+                tabBtns.forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        // 更新活动标签
+                        tabBtns.forEach(b => b.classList.remove('active'));
+                        this.classList.add('active');
+                        const tab = this.dataset.tab;
+                        if (tab === 'current') {
+                            displayMembers(membersData.filter(member => member.status === 'active'));
+                            networkContainer.style.display = 'none';
+                        } else if (tab === 'alumni') {
+                            displayMembers(membersData.filter(member => member.status === 'graduated'));
+                            networkContainer.style.display = 'none';
+                        } else if (tab === 'network') {
+                            container.innerHTML = '';
+                            networkContainer.style.display = 'block';
+                            renderMemberNetwork(networkData);
+                        }
+                    });
+                });
+                function displayMembers(members) {
+                    container.innerHTML = '';
+                    networkContainer.style.display = 'none';
+                    if (members.length === 0) {
+                        container.innerHTML = '<div class="no-members">暂无成员数据</div>';
+                        return;
+                    }
+                    // 按学位类型分组
+                    const groupedMembers = {
+                        '博士': members.filter(m => m.degree === '博士'),
+                        '硕士': members.filter(m => m.degree === '硕士'),
+                        '本科': members.filter(m => m.degree === '本科')
+                    };
+                    // 创建博士和硕士两个部分
+                    for (const [degree, membersList] of Object.entries(groupedMembers)) {
+                        if (membersList.length === 0) continue;
+                        const section = document.createElement('div');
+                        section.className = 'degree-section';
+                        const title = document.createElement('h2');
+                        title.className = 'degree-title';
+                        title.textContent = `${degree}生`;
+                        const list = document.createElement('div');
+                        list.className = 'member-list';
+                        membersList.forEach(member => {
+                            const memberRow = document.createElement('div');
+                            memberRow.className = 'member-card';
+                            // 处理图片占位符
+                            const imageContent = member.image
+                                ? `<img src="${member.image}" alt="${member.name}">`
+                                : '<div class="placeholder">👤</div>';
+                            // 处理邮箱显示
+                            const emailContent = member.email
+                                ? `<div class="member-email">邮箱：${member.email}</div>`
+                                : '';
+                            // 处理研究兴趣
+                            const interestContent = member.interest
+                                ? `<div class="member-interest"><strong>研究兴趣：</strong>${member.interest}</div>`
+                                : '';
+                            const directionContent = member.direction
+                                ? `<div class="member-direction"><strong>毕业去向：</strong>${member.direction}</div>`
+                                : '';
+                            memberRow.innerHTML = `
+                                    <div class="member-image">
+                                        ${imageContent}
+                                    </div>
+                                    <div class="member-info">
+                                        <h3 class="member-name">${member.name}</h3>
+                                        <div class="member-degree-grade">
+                                            <span class="member-degree">${member.degree}</span>
+                                            <span class="member-grade">${member.grade}</span>
+                                        </div>
+                                        ${emailContent}
+                                        ${interestContent}
+                                        ${directionContent}
+                                </div>
+                            `;
+                            list.appendChild(memberRow);
+                        });
+                        section.appendChild(title);
+                        section.appendChild(list);
+                        container.appendChild(section);
+                    }
+                }
+                
+                function buildNetworkData(members, publications) {
+                    // 创建成员ID映射
+                    const memberMap = {};
+                    members.forEach(member => {
+                        memberMap[member.name] = {
+                            id: member.name,
+                            name: member.name,
+                            degree: member.degree,
+                            status: member.status,
+                            paperCount: 0,
+                            coauthors: {}
+                        };
+                    });
+                    
+                    // 统计每个成员的论文数量和合作关系
+                    publications.forEach(pub => {
+                        const authors = pub.author.split(',').map(author => {
+                            // 处理作者名字（移除#、*等符号）
+                            return author.replace(/[#*]/g, '').trim();
+                        });
+                        
+                        // 更新每个作者的论文数量
+                        authors.forEach(author => {
+                            if (memberMap[author]) {
+                                memberMap[author].paperCount++;
+                            }
+                        });
+                        
+                        // 更新合作关系
+                        for (let i = 0; i < authors.length; i++) {
+                            for (let j = i + 1; j < authors.length; j++) {
+                                const author1 = authors[i];
+                                const author2 = authors[j];
+                                
+                                if (memberMap[author1] && memberMap[author2]) {
+                                    // 创建或更新合作关系
+                                    const key = [author1, author2].sort().join('|');
+                                    if (!memberMap[author1].coauthors[key]) {
+                                        memberMap[author1].coauthors[key] = {
+                                            target: author2,
+                                            count: 0
+                                        };
+                                    }
+                                    if (!memberMap[author2].coauthors[key]) {
+                                        memberMap[author2].coauthors[key] = {
+                                            target: author1,
+                                            count: 0
+                                        };
+                                    }
+                                    
+                                    memberMap[author1].coauthors[key].count++;
+                                    memberMap[author2].coauthors[key].count++;
+                                }
+                            }
+                        }
+                    });
+                    
+                    // 构建节点和边数据
+                    const nodes = [];
+                    const links = [];
+                    const linkMap = {};
+                    
+                    // 添加节点
+                    Object.values(memberMap).forEach(member => {
+                        if (member.paperCount > 0) {
+                            nodes.push({
+                                id: member.id,
+                                name: member.name,
+                                value: member.paperCount,
+                                degree: member.degree,
+                                status: member.status
+                            });
+                        }
+                    });
+                    
+                    // 添加边
+                    Object.values(memberMap).forEach(member => {
+                        Object.values(member.coauthors).forEach(coauthor => {
+                            const key = [member.id, coauthor.target].sort().join('|');
+                            
+                            // 避免重复添加边
+                            if (!linkMap[key] && coauthor.count > 0) {
+                                links.push({
+                                    source: member.id,
+                                    target: coauthor.target,
+                                    value: coauthor.count
+                                });
+                                linkMap[key] = true;
                             }
                         });
                     });
-
-                    function displayMembers(members) {
-                        container.innerHTML = '';
-
-                        if (members.length === 0) {
-                            container.innerHTML = '<div class="no-members">暂无成员数据</div>';
-                            return;
-                        }
-
-                        // 按学位类型分组
-                        const groupedMembers = {
-                            '博士': members.filter(m => m.degree === '博士'),
-                            '硕士': members.filter(m => m.degree === '硕士'),
-                            '本科': members.filter(m => m.degree === '本科')
-                        };
-
-                        // 创建博士和硕士两个部分
-                        for (const [degree, membersList] of Object.entries(groupedMembers)) {
-                            if (membersList.length === 0) continue;
-
-                            const section = document.createElement('div');
-                            section.className = 'degree-section';
-
-                            const title = document.createElement('h2');
-                            title.className = 'degree-title';
-                            title.textContent = `${degree}生`;
-
-                            const list = document.createElement('div');
-                            list.className = 'member-list';
-
-                            membersList.forEach(member => {
-                                const memberRow = document.createElement('div');
-                                memberRow.className = 'member-card';
-
-                                // 处理图片占位符
-                                const imageContent = member.image
-                                    ? `<img src="${member.image}" alt="${member.name}">`
-                                    : '<div class="placeholder">👤</div>';
-
-                                // 处理邮箱显示
-                                const emailContent = member.email
-                                    ? `<div class="member-email">邮箱：${member.email}</div>`
-                                    : '';
-
-                                // 处理研究兴趣
-                                const interestContent = member.interest
-                                    ? `<div class="member-interest"><strong>研究兴趣：</strong>${member.interest}</div>`
-                                    : '';
-                                const directionContent = member.direction
-                                    ? `<div class="member-direction"><strong>毕业去向：</strong>${member.direction}</div>`
-                                    : '';
-
-                                memberRow.innerHTML = `
-                                        <div class="member-image">
-                                            ${imageContent}
-                                        </div>
-                                        <div class="member-info">
-                                            <h3 class="member-name">${member.name}</h3>
-                                            <div class="member-degree-grade">
-                                                <span class="member-degree">${member.degree}</span>
-                                                <span class="member-grade">${member.grade}</span>
-                                            </div>
-                                            ${emailContent}
-                                            ${interestContent}
-                                            ${directionContent}
-                                    </div>
-                                `;
-
-                                list.appendChild(memberRow);
-                            });
-
-                            section.appendChild(title);
-                            section.appendChild(list);
-                            container.appendChild(section);
-                        }
+                    
+                    return { nodes, links };
+                }
+                
+                function renderMemberNetwork(networkData) {
+                    const container = d3.select("#member-network");
+                    container.html(""); // 清除之前的内容
+                    
+                    const width = container.node().clientWidth;
+                    const height = container.node().clientHeight;
+                    
+                    // 创建SVG画布
+                    const svg = container.append("svg")
+                        .attr("width", width)
+                        .attr("height", height);
+                    
+                    // 创建力导向图模拟器
+                    const simulation = d3.forceSimulation(networkData.nodes)
+                        .force("link", d3.forceLink(networkData.links).id(d => d.id).distance(100))
+                        .force("charge", d3.forceManyBody().strength(-300))
+                        .force("center", d3.forceCenter(width / 2, height / 2))
+                        .force("collide", d3.forceCollide().radius(d => Math.sqrt(d.value) * 5 + 10));
+                    
+                    // 创建连线
+                    const link = svg.append("g")
+                        .attr("class", "links")
+                        .selectAll("line")
+                        .data(networkData.links)
+                        .enter()
+                        .append("line")
+                        .attr("class", "link")
+                        .attr("stroke-width", d => Math.min(10, Math.sqrt(d.value)));
+                    
+                    // 创建节点
+                    const node = svg.append("g")
+                        .attr("class", "nodes")
+                        .selectAll("circle")
+                        .data(networkData.nodes)
+                        .enter()
+                        .append("circle")
+                        .attr("class", "node")
+                        .attr("r", d => Math.max(10, Math.sqrt(d.value) * 3))
+                        .attr("fill", d => d.status === "active" ? "#3498db" : "#e74c3c")
+                        .call(d3.drag()
+                            .on("start", dragstarted)
+                            .on("drag", dragged)
+                            .on("end", dragended));
+                    
+                    // 添加节点标签
+                    const labels = svg.append("g")
+                        .attr("class", "labels")
+                        .selectAll("text")
+                        .data(networkData.nodes)
+                        .enter()
+                        .append("text")
+                        .attr("class", "node-label")
+                        .text(d => d.name)
+                        .attr("dy", d => Math.max(10, Math.sqrt(d.value) * 3) + 15);
+                    
+                    // 添加节点悬停提示
+                    node.append("title")
+                        .text(d => `${d.name}\n论文: ${d.value}篇`);
+                    
+                    // 更新节点和连线位置
+                    simulation.on("tick", () => {
+                        link
+                            .attr("x1", d => d.source.x)
+                            .attr("y1", d => d.source.y)
+                            .attr("x2", d => d.target.x)
+                            .attr("y2", d => d.target.y);
+                        
+                        node
+                            .attr("cx", d => d.x)
+                            .attr("cy", d => d.y);
+                        
+                        labels
+                            .attr("x", d => d.x)
+                            .attr("y", d => d.y);
+                    });
+                    
+                    // 拖拽功能
+                    function dragstarted(event, d) {
+                        if (!event.active) simulation.alphaTarget(0.3).restart();
+                        d.fx = d.x;
+                        d.fy = d.y;
                     }
-                })
-                .catch(error => {
-                    console.error('加载成员数据失败:', error);
-                    document.getElementById('membersContent').innerHTML =
-                        '<div class="no-members">无法加载成员数据，请稍后再试。</div>';
-                });
-
+                    
+                    function dragged(event, d) {
+                        d.fx = event.x;
+                        d.fy = event.y;
+                    }
+                    
+                    function dragended(event, d) {
+                        if (!event.active) simulation.alphaTarget(0);
+                        d.fx = null;
+                        d.fy = null;
+                    }
+                    
+                    // 添加缩放功能
+                    const zoom = d3.zoom()
+                        .scaleExtent([0.5, 4])
+                        .on("zoom", (event) => {
+                            svg.attr("transform", event.transform);
+                        });
+                    
+                    svg.call(zoom);
+                }
+            })
+            .catch(error => {
+                console.error('加载数据失败:', error);
+                document.getElementById('membersContent').innerHTML =
+                    '<div class="no-members">无法加载数据，请稍后再试。</div>';
+            });
             // 移动端菜单切换
             const hamburger = document.querySelector('.hamburger');
             const navLinks = document.querySelector('.nav-links');
-
             hamburger.addEventListener('click', () => {
                 navLinks.classList.toggle('active');
                 hamburger.classList.toggle('active');
             });
-
             // 滚动时导航栏样式变化
             window.addEventListener('scroll', () => {
                 const navbar = document.querySelector('.navbar');
@@ -565,7 +883,6 @@
                     navbar.classList.remove('scrolled');
                 }
             });
-
             // 设置当前页面导航项激活状态
             document.querySelectorAll('.nav-item').forEach(item => {
                 if (item.href === window.location.href) {
