@@ -1109,7 +1109,6 @@
                         })
                         .on("click", function(event, d) {
                             event.stopPropagation();
-                            console.log("Node clicked:", d);
                             showInfoPanel(d, "node");
                         })
                         .call(d3.drag()
