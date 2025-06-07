@@ -1,6 +1,7 @@
 [
   {
     "name": "严川",
+    "name_en": "Chuan Yan",
     "degree": "老师",
     "email": "hfxiyang@163.com",
     "interest": "食物网、生物地理学、保护生物学",
@@ -9,6 +10,7 @@
   },
   {
     "name": "郝希阳",
+    "name_en": "Xiyang Hao",
     "degree": "博士",
     "grade": "21级",
     "email": "hfxiyang@163.com",
@@ -18,6 +20,7 @@
   },
   {
     "name": "赵洋洋",
+    "name_en": "Yangyang Zhao",
     "degree": "博士",
     "grade": "22级",
     "email": "zhaoyangyangsky@163.com",
@@ -27,6 +30,7 @@
   },
   {
     "name": "周飞",
+    "name_en": "Fei Zhou",
     "degree": "博士",
     "grade": "23级",
     "email": "809190394@qq.com",
@@ -36,6 +40,7 @@
   },
   {
     "name": "周洁洋",
+    "name_en": "Jieyang Zhou",
     "degree": "博士",
     "grade": "23级",
     "email": "zhjieyang2023@lzu.edu.cn",
@@ -45,6 +50,7 @@
   },
   {
     "name": "张濠天",
+    "name_en": "Haotian Zhang",
     "degree": "博士",
     "grade": "24级",
     "email": "hosky125@163.com",
@@ -54,6 +60,7 @@
   },
   {
     "name": "姚紫珊",
+    "name_en": "Zishan Yao",
     "degree": "硕士",
     "grade": "22级",
     "email": "ylxester@163.com",
@@ -63,6 +70,7 @@
   },
   {
     "name": "张志成",
+    "name_en": "Zhicheng Zhang",
     "degree": "硕士",
     "grade": "22级",
     "email": "zhangzhicheng_eco@foxmail.com",
@@ -72,6 +80,7 @@
   },
   {
     "name": "邓晓玲",
+    "name_en": "Xiaoling Deng",
     "degree": "硕士",
     "grade": "23级",
     "email": "2451093787@qq.com",
@@ -81,6 +90,7 @@
   },
     {
     "name": "孙伟成",
+    "name_en": "Weicheng Sun",
     "degree": "硕士",
     "grade": "23级",
     "email": "sunwch2023@lzu.edu.cn",
@@ -90,6 +100,7 @@
   },
     {
     "name": "白广生",
+    "name_en": "Guangsheng Bai",
     "degree": "硕士",
     "grade": "24级",
     "email": "3328788557@qq.com",
@@ -99,6 +110,7 @@
   },
     {
     "name": "罗添宝",
+    "name_en": "Tianbao Luo",
     "degree": "硕士",
     "grade": "24级",
     "email": "luotb7@163.com",
@@ -108,6 +120,7 @@
   },
   {
     "name": "马博璇",
+    "name_en": "Boxuan Ma",
     "degree": "本科",
     "grade": "24级",
     "email": "mabx2024@lzu.edu.cn",
@@ -117,6 +130,7 @@
   },
   {
     "name": "刘睿",
+    "name_en": "Rui Liu",
     "degree": "硕士",
     "grade": "20级",
     "email": "",
@@ -127,6 +141,7 @@
   },
   {
     "name": "张永俊",
+    "name_en": "Yongjun Zhang",
     "degree": "硕士",
     "grade": "20级",
     "email": "",
@@ -137,6 +152,7 @@
   },
   {
     "name": "张一文",
+    "name_en": "Yiwen Zhang",
     "degree": "硕士",
     "grade": "21级",
     "email": "",
