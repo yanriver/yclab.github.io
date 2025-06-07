@@ -770,15 +770,21 @@
                 
                 function buildNetworkData(members, publications) {
                     const memberMap = {};
+                    const enNameToMember = {};
+                    
                     members.forEach(member => {
                         memberMap[member.name] = {
                             id: member.name,
                             name: member.name,
+                            name_en: member.name_en,
                             degree: member.degree,
                             status: member.status,
                             paperCount: 0,
                             coauthors: {}
                         };
+                        if (member.name_en) {
+                            enNameToMember[member.name_en] = member.name;
+                        }
                     });
                     
                     const totalPubs = publications.length;
@@ -795,34 +801,37 @@
                             return author.replace(/[#*]/g, '').trim();
                         });
                         
-                        authors.forEach(author => {
-                            if (memberMap[author] && author !== "严川") {
-                                memberMap[author].paperCount++;
+                        authors.forEach(authorEn => {
+                            const memberName = enNameToMember[authorEn];
+                            if (memberName && memberName !== "严川") {
+                                memberMap[memberName].paperCount++;
                             }
                         });
                         
                         for (let i = 0; i < authors.length; i++) {
                             for (let j = i + 1; j < authors.length; j++) {
-                                const author1 = authors[i];
-                                const author2 = authors[j];
+                                const author1En = authors[i];
+                                const author2En = authors[j];
+                                const member1 = enNameToMember[author1En];
+                                const member2 = enNameToMember[author2En];
                                 
-                                if (memberMap[author1] && memberMap[author2]) {
-                                    const key = [author1, author2].sort().join('|');
-                                    if (!memberMap[author1].coauthors[key]) {
-                                        memberMap[author1].coauthors[key] = {
-                                            target: author2,
+                                if (member1 && member2) {
+                                    const key = [member1, member2].sort().join('|');
+                                    if (!memberMap[member1].coauthors[key]) {
+                                        memberMap[member1].coauthors[key] = {
+                                            target: member2,
                                             count: 0
                                         };
                                     }
-                                    if (!memberMap[author2].coauthors[key]) {
-                                        memberMap[author2].coauthors[key] = {
-                                            target: author1,
+                                    if (!memberMap[member2].coauthors[key]) {
+                                        memberMap[member2].coauthors[key] = {
+                                            target: member1,
                                             count: 0
                                         };
                                     }
                                     
-                                    memberMap[author1].coauthors[key].count++;
-                                    memberMap[author2].coauthors[key].count++;
+                                    memberMap[member1].coauthors[key].count++;
+                                    memberMap[member2].coauthors[key].count++;
                                 }
                             }
                         }
