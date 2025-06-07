@@ -992,8 +992,8 @@
                         let content = "";
                         
                         if (type === "node") {
-                            const statusText = data.degree === "老师" ? "导师" : 
-                                             data.status === "active" ? "当前成员" : "已毕业成员";
+                            const statusText = d.status === "fixed" ? "导师" : 
+                                             d.status === "active" ? "当前成员" : "已毕业成员";
                             
                             content = `
                                 <h3>${data.name}</h3>
@@ -1089,7 +1089,7 @@
                         .attr("class", "node")
                         .attr("r", d => Math.max(15, Math.sqrt(Math.max(1, d.value)) * 4))
                         .attr("fill", d => {
-                            if (d.degree === "老师") return "#2c3e50";
+                            if (d.status === "fixed") return "#2c3e50";
                             if (d.status === "active") return "#3498db";
                             if (d.status === "graduated") return "#e74c3c";
                             return "#3498db";
