@@ -435,8 +435,15 @@
         }
         
         .link {
+            fill: none;
             stroke: #999;
             stroke-opacity: 0.6;
+            cursor: pointer;
+            transition: stroke-opacity 0.2s ease;
+        }
+        
+        .link:hover {
+            stroke-opacity: 0.8;
         }
         
         .network-legend {
@@ -540,11 +547,6 @@
                 width: 100%;
                 max-width: 400px;
                 margin: 0 auto;
-            }
-            .network-info-panel {
-                width: 90vw;
-                max-height: 80vh;
-                padding: 15px;
             }
         }
         
@@ -1011,7 +1013,7 @@
                             if (data.papers && data.papers.length > 0) {
                                 content += `
                                     <div class="info-section">
-                                        <strong>已发表论文：</strong><br>
+                                        <strong>代表性论文：</strong><br>
                                         ${data.papers.slice(0, 10).map(paper => 
                                             `• ${paper.title} <br><em>${paper.journal}, ${paper.year}</em>`
                                         ).join('<br><br>')}
@@ -1061,11 +1063,14 @@
                     
                     const link = svg.append("g")
                         .attr("class", "links")
-                        .selectAll("line")
+                        .selectAll("path")
                         .data(networkData.links)
                         .enter()
-                        .append("line")
+                        .append("path")
                         .attr("class", "link")
+                        .attr("fill", "none")
+                        .attr("stroke", "#999")
+                        .attr("stroke-opacity", 0.6)
                         .attr("stroke-width", d => Math.min(8, Math.sqrt(d.value) * 2))
                         .on("mouseover", function(event, d) {
                             const isMobile = window.innerWidth <= 768;
@@ -1132,6 +1137,29 @@
                         .attr("dy", d => Math.max(15, Math.sqrt(Math.max(1, d.value)) * 4) + 18)
                         .style("font-size", window.innerWidth <= 768 ? "10px" : "12px");
                     
+                    function createCurvedPath(d, index) {
+                        const dx = d.target.x - d.source.x;
+                        const dy = d.target.y - d.source.y;
+                        const distance = Math.sqrt(dx * dx + dy * dy);
+                        
+                        // 增加弧度，让弧形更明显
+                        const curvature = 0.4 + (index % 4) * 0.15; // 0.4, 0.55, 0.7, 0.85的弧度
+                        const curveDirection = index % 2 === 0 ? 1 : -1; // 交替弯曲方向
+                        
+                        // 计算控制点
+                        const midX = (d.source.x + d.target.x) / 2;
+                        const midY = (d.source.y + d.target.y) / 2;
+                        
+                        // 增大偏移量，让弧形更明显
+                        const offsetX = -dy / distance * curvature * distance * 0.3 * curveDirection;
+                        const offsetY = dx / distance * curvature * distance * 0.3 * curveDirection;
+                        
+                        const controlX = midX + offsetX;
+                        const controlY = midY + offsetY;
+                        
+                        return `M ${d.source.x},${d.source.y} Q ${controlX},${controlY} ${d.target.x},${d.target.y}`;
+                    }
+                    
                     simulation.on("tick", () => {
                         networkData.nodes.forEach(d => {
                             const radius = Math.max(15, Math.sqrt(Math.max(1, d.value)) * 4);
@@ -1139,11 +1167,7 @@
                             d.y = Math.max(radius, Math.min(height - radius, d.y));
                         });
                         
-                        link
-                            .attr("x1", d => d.source.x)
-                            .attr("y1", d => d.source.y)
-                            .attr("x2", d => d.target.x)
-                            .attr("y2", d => d.target.y);
+                        link.attr("d", (d, i) => createCurvedPath(d, i));
                         
                         node
                             .attr("cx", d => d.x)
