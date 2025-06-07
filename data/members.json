@@ -61,8 +61,8 @@
   {
     "name": "姚紫珊",
     "name_en": "Zishan Yao",
-    "degree": "硕士",
-    "grade": "22级",
+    "degree": "博士",
+    "grade": "25级",
     "email": "ylxester@163.com",
     "interest": "人类活动影响下荒漠-绿洲生态系统动植物杂合互作网络",
     "image": "../images/members/姚紫珊.jpg",
@@ -76,7 +76,8 @@
     "email": "zhangzhicheng_eco@foxmail.com",
     "interest": "祁连山东部地区开花植物-昆虫植食网络对海拔梯度的响应",
     "image": "../images/members/张志成.jpg",
-    "status": "active"
+    "status": "graduated",
+    "direction": "巴塞罗纳自治大学读博"
   },
   {
     "name": "邓晓玲",
