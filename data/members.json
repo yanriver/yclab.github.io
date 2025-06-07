@@ -69,21 +69,10 @@
     "status": "active"
   },
   {
-    "name": "张志成",
-    "name_en": "Zhicheng Zhang",
-    "degree": "硕士",
-    "grade": "22级",
-    "email": "zhangzhicheng_eco@foxmail.com",
-    "interest": "祁连山东部地区开花植物-昆虫植食网络对海拔梯度的响应",
-    "image": "../images/members/张志成.jpg",
-    "status": "graduated",
-    "direction": "巴塞罗纳自治大学读博"
-  },
-  {
     "name": "邓晓玲",
     "name_en": "Xiaoling Deng",
-    "degree": "硕士",
-    "grade": "23级",
+    "degree": "博士",
+    "grade": "25级",
     "email": "2451093787@qq.com",
     "interest": "动物生态学，淡水鱼类食物网",
     "image": "../images/members/邓晓玲.jpg",
@@ -161,6 +150,17 @@
     "image": "../images/members/张一文.jpg",
     "status": "graduated",
     "direction": "北京师范大学读博"
+  },
+  {
+    "name": "张志成",
+    "name_en": "Zhicheng Zhang",
+    "degree": "硕士",
+    "grade": "22级",
+    "email": "zhangzhicheng_eco@foxmail.com",
+    "interest": "祁连山东部地区开花植物-昆虫植食网络对海拔梯度的响应",
+    "image": "../images/members/张志成.jpg",
+    "status": "graduated",
+    "direction": "巴塞罗纳自治大学读博"
   }
 ]
 
