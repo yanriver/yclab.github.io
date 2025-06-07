@@ -416,7 +416,6 @@
         }
         
         .node {
-            fill: var(--primary-color);
             stroke: #fff;
             stroke-width: 2px;
             cursor: pointer;
@@ -1110,6 +1109,7 @@
                         })
                         .on("click", function(event, d) {
                             event.stopPropagation();
+                            console.log("Node clicked:", d);
                             showInfoPanel(d, "node");
                         })
                         .call(d3.drag()
