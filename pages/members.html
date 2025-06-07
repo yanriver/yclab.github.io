@@ -468,10 +468,60 @@
             margin: 0 0.5rem;
         }
         
-        .loading {
-            text-align: center;
-            padding: 2rem;
+        .network-info-panel {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+            padding: 20px;
+            max-width: 500px;
+            max-height: 400px;
+            overflow-y: auto;
+            z-index: 2000;
+            display: none;
+        }
+        
+        .network-info-panel .close-btn {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            background: none;
+            border: none;
+            font-size: 20px;
+            cursor: pointer;
             color: #666;
+        }
+        
+        .network-info-panel .close-btn:hover {
+            color: #333;
+        }
+        
+        .network-info-panel h3 {
+            margin: 0 20px 15px 0;
+            color: var(--primary-color);
+        }
+        
+        .network-info-panel .info-section {
+            margin-bottom: 15px;
+        }
+        
+        .network-info-panel .info-section strong {
+            color: var(--secondary-color);
+        }
+        
+        .network-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 1999;
+            display: none;
         }
         
         .footer {
@@ -658,6 +708,10 @@
                             <div class="legend-circle" style="background-color:#e74c3c"></div>
                             <span>已毕业成员</span>
                         </div>
+                        <div class="legend-item">
+                            <div class="legend-circle" style="background-color:#95a5a6"></div>
+                            <span>其他成员</span>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -691,6 +745,8 @@
                         const tab = this.dataset.tab;
                         
                         d3.selectAll(".network-tooltip").remove();
+                        d3.selectAll(".network-info-panel").remove();
+                        d3.selectAll(".network-overlay").remove();
                         
                         if (tab === 'current') {
                             displayMembers(membersData.filter(member => member.status === 'active'));
@@ -864,16 +920,14 @@
                     const linkMap = {};
                     
                     Object.values(memberMap).forEach(member => {
-                        if (member.paperCount > 0) {
-                            nodes.push({
-                                id: member.id,
-                                name: member.name,
-                                value: member.paperCount,
-                                degree: member.degree,
-                                status: member.status,
-                                papers: member.papers
-                            });
-                        }
+                        nodes.push({
+                            id: member.id,
+                            name: member.name,
+                            value: member.paperCount,
+                            degree: member.degree,
+                            status: member.status,
+                            papers: member.papers
+                        });
                     });
                     
                     Object.values(memberMap).forEach(member => {
@@ -899,6 +953,8 @@
                     container.html("");
                     
                     d3.selectAll(".network-tooltip").remove();
+                    d3.selectAll(".network-info-panel").remove();
+                    d3.selectAll(".network-overlay").remove();
                     
                     const width = container.node().clientWidth;
                     const height = container.node().clientHeight;
@@ -907,26 +963,99 @@
                         .attr("width", width)
                         .attr("height", height);
                     
+                    const overlay = d3.select("body").append("div")
+                        .attr("class", "network-overlay")
+                        .on("click", closeInfoPanel);
+                    
+                    const infoPanel = d3.select("body").append("div")
+                        .attr("class", "network-info-panel");
+                    
+                    const closeBtn = infoPanel.append("button")
+                        .attr("class", "close-btn")
+                        .html("×")
+                        .on("click", closeInfoPanel);
+                    
                     const tooltip = d3.select("body").append("div")
                         .attr("class", "network-tooltip")
                         .style("position", "absolute")
                         .style("background", "rgba(0, 0, 0, 0.8)")
                         .style("color", "white")
-                        .style("padding", "10px")
-                        .style("border-radius", "5px")
+                        .style("padding", "8px 12px")
+                        .style("border-radius", "4px")
                         .style("font-size", "12px")
-                        .style("max-width", "400px")
-                        .style("max-height", "300px")
-                        .style("overflow-y", "auto")
                         .style("opacity", 0)
                         .style("pointer-events", "none")
                         .style("z-index", "1000");
+                    
+                    function closeInfoPanel() {
+                        overlay.style("display", "none");
+                        infoPanel.style("display", "none");
+                    }
+                    
+                    function showInfoPanel(data, type) {
+                        let content = "";
+                        
+                        if (type === "node") {
+                            const statusText = data.degree === "老师" ? "导师" : 
+                                             data.status === "active" ? "当前成员" : "已毕业成员";
+                            
+                            content = `
+                                <h3>${data.name}</h3>
+                                <div class="info-section">
+                                    <strong>身份：</strong>${statusText}<br>
+                                    <strong>学位：</strong>${data.degree}<br>
+                                    <strong>论文数量：</strong>${data.value}篇
+                                </div>
+                            `;
+                            
+                            if (data.papers && data.papers.length > 0) {
+                                content += `
+                                    <div class="info-section">
+                                        <strong>代表性论文：</strong><br>
+                                        ${data.papers.slice(0, 10).map(paper => 
+                                            `• ${paper.title} <br><em>${paper.journal}, ${paper.year}</em>`
+                                        ).join('<br><br>')}
+                                        ${data.papers.length > 10 ? '<br><br>...' : ''}
+                                    </div>
+                                `;
+                            } else {
+                                content += `
+                                    <div class="info-section">
+                                        <strong>暂无发表论文</strong>
+                                    </div>
+                                `;
+                            }
+                        } else if (type === "link") {
+                            content = `
+                                <h3>${data.source.name} ⟷ ${data.target.name}</h3>
+                                <div class="info-section">
+                                    <strong>合作论文数：</strong>${data.value}篇
+                                </div>
+                                <div class="info-section">
+                                    <strong>共同论文：</strong><br>
+                                    ${data.papers.slice(0, 8).map(paper => 
+                                        `• ${paper.title} <br><em>${paper.journal}, ${paper.year}</em>`
+                                    ).join('<br><br>')}
+                                    ${data.papers.length > 8 ? '<br><br>...' : ''}
+                                </div>
+                            `;
+                        }
+                        
+                        infoPanel.html(content);
+                        infoPanel.append("button")
+                            .attr("class", "close-btn")
+                            .html("×")
+                            .on("click", closeInfoPanel);
+                        
+                        overlay.style("display", "block");
+                        infoPanel.style("display", "block");
+                    }
                     
                     const simulation = d3.forceSimulation(networkData.nodes)
                         .force("link", d3.forceLink(networkData.links).id(d => d.id).distance(120))
                         .force("charge", d3.forceManyBody().strength(-400))
                         .force("center", d3.forceCenter(width / 2, height / 2))
-                        .force("collide", d3.forceCollide().radius(d => Math.sqrt(d.value) * 4 + 15));
+                        .force("collide", d3.forceCollide().radius(d => Math.max(15, Math.sqrt(Math.max(1, d.value)) * 4) + 5));
                     
                     const link = svg.append("g")
                         .attr("class", "links")
@@ -937,22 +1066,20 @@
                         .attr("class", "link")
                         .attr("stroke-width", d => Math.min(8, Math.sqrt(d.value) * 2))
                         .on("mouseover", function(event, d) {
-                            const collaborationInfo = `
-                                <strong>${d.source.name} ⟷ ${d.target.name}</strong><br>
-                                <strong>合作论文数：${d.value}</strong><br><br>
-                                <strong>共同论文：</strong><br>
-                                ${d.papers.slice(0, 10).map(paper => 
-                                    `• ${paper.title} (${paper.journal}, ${paper.year})`
-                                ).join('<br>')}
-                                ${d.papers.length > 10 ? '<br>...' : ''}
-                            `;
-                            tooltip.html(collaborationInfo)
-                                .style("opacity", 1)
-                                .style("left", (event.pageX + 10) + "px")
-                                .style("top", (event.pageY - 10) + "px");
+                            const isMobile = window.innerWidth <= 768;
+                            if (!isMobile) {
+                                tooltip.html(`${d.source.name} ⟷ ${d.target.name}<br>合作论文: ${d.value}篇`)
+                                    .style("opacity", 1)
+                                    .style("left", (event.pageX + 10) + "px")
+                                    .style("top", (event.pageY - 10) + "px");
+                            }
                         })
                         .on("mouseout", function() {
                             tooltip.style("opacity", 0);
+                        })
+                        .on("click", function(event, d) {
+                            event.stopPropagation();
+                            showInfoPanel(d, "link");
                         });
                     
                     const node = svg.append("g")
@@ -962,32 +1089,30 @@
                         .enter()
                         .append("circle")
                         .attr("class", "node")
-                        .attr("r", d => Math.max(12, Math.sqrt(d.value) * 4))
+                        .attr("r", d => Math.max(15, Math.sqrt(Math.max(1, d.value)) * 4))
                         .attr("fill", d => {
+                            if (d.degree === "老师" || d.name === "严川") return "#2c3e50";
                             if (d.status === "active") return "#3498db";
                             if (d.status === "graduated") return "#e74c3c";
-                            return "#2c3e50";
+                            return "#95a5a6";
                         })
+                        .attr("stroke", "#fff")
+                        .attr("stroke-width", 2)
                         .on("mouseover", function(event, d) {
-                            const paperList = d.papers.slice(0, 8).map(paper => 
-                                `• ${paper.title} (${paper.journal}, ${paper.year})`
-                            ).join('<br>');
-                            
-                            const memberInfo = `
-                                <strong>${d.name}</strong><br>
-                                <strong>学位：${d.degree}</strong><br>
-                                <strong>论文数：${d.value}</strong><br><br>
-                                <strong>代表性论文：</strong><br>
-                                ${paperList}
-                                ${d.papers.length > 8 ? '<br>...' : ''}
-                            `;
-                            tooltip.html(memberInfo)
-                                .style("opacity", 1)
-                                .style("left", (event.pageX + 10) + "px")
-                                .style("top", (event.pageY - 10) + "px");
+                            const isMobile = window.innerWidth <= 768;
+                            if (!isMobile) {
+                                tooltip.html(`${d.name}<br>论文: ${d.value}篇`)
+                                    .style("opacity", 1)
+                                    .style("left", (event.pageX + 10) + "px")
+                                    .style("top", (event.pageY - 10) + "px");
+                            }
                         })
                         .on("mouseout", function() {
                             tooltip.style("opacity", 0);
+                        })
+                        .on("click", function(event, d) {
+                            event.stopPropagation();
+                            showInfoPanel(d, "node");
                         })
                         .call(d3.drag()
                             .on("start", dragstarted)
@@ -1002,7 +1127,8 @@
                         .append("text")
                         .attr("class", "node-label")
                         .text(d => d.name)
-                        .attr("dy", d => Math.max(12, Math.sqrt(d.value) * 4) + 18);
+                        .attr("dy", d => Math.max(15, Math.sqrt(Math.max(1, d.value)) * 4) + 18)
+                        .style("font-size", window.innerWidth <= 768 ? "10px" : "12px");
                     
                     simulation.on("tick", () => {
                         link
@@ -1042,6 +1168,12 @@
                 console.error('加载数据失败:', error);
                 document.getElementById('membersContent').innerHTML =
                     '<div class="no-members">无法加载数据，请稍后再试。</div>';
+            });
+            
+            window.addEventListener('beforeunload', function() {
+                d3.selectAll(".network-tooltip").remove();
+                d3.selectAll(".network-info-panel").remove();
+                d3.selectAll(".network-overlay").remove();
             });
             
             const hamburger = document.querySelector('.hamburger');
