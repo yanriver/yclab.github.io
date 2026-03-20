@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>新闻动态 | YCLab</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/news.css">
+    <link rel="stylesheet" href="../css/news-modal.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="../index.html" class="logo-link">
+                <img src="../images/lab-logo.jpg" alt="YCLab Logo">
+            </a>
+            <button class="hamburger">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </button>
+            <ul class="nav-links">
+                <li><a href="../index.html" class="nav-item">Home</a></li>
+                <li><a href="news.html" class="nav-item active">News</a></li>
+                <li><a href="research.html" class="nav-item">Research</a></li>
+                <li><a href="publications.html" class="nav-item">Publications</a></li>
+                <li><a href="members.html" class="nav-item">Members</a></li>
+                <li><a href="blogs.html" class="nav-item">Blogs</a></li>
+                <li><a href="sources.html" class="nav-item">Sources</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main>
+        <div class="news-header page-header">
+            <h1>新闻动态</h1>
+        </div>
+
+        <div class="news-container">
+            <div class="news-tabs">
+                <button class="news-tab-btn active" data-tab="all">全部新闻</button>
+                <button class="news-tab-btn" data-tab="research">研究成果</button>
+                <button class="news-tab-btn" data-tab="event">组内活动</button>
+            </div>
+
+            <div id="newsContent">
+                <div class="no-news">加载中...</div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <p>&copy; 2025 YCLab. All rights reserved.</p>
+    </footer>
+
+    <script src="../js/news-common.js"></script>
+    <script src="../js/news-list.js"></script>
+</body>
+</html>
