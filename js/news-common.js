@@ -82,7 +82,7 @@
             ...item,
             id: item?.id || `news-${item?.date || 'undated'}-${index + 1}`,
             summary,
-            contentBlocks: normalizeContentBlocks(item?.content, summary)
+            contentBlocks: normalizeContentBlocks(item?.contentBlocks || item?.content, summary)
         };
     }
 

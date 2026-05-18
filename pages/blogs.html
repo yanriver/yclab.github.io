@@ -222,7 +222,8 @@
                     const container = document.getElementById('blogsContent');
                     const tabBtns = document.querySelectorAll('.blog-tabs .tab-btn');
 
-                    // 显示所有博客
+                    // 按日期排序，最新的在最上面
+                    data.sort((a, b) => new Date(b.date) - new Date(a.date));
                     displayBlogs(data);
 
                     // 标签切换功能

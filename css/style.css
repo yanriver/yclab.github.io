@@ -426,6 +426,7 @@ body {
     align-items: center;
     padding: 15px;
     border-bottom: 1px solid rgba(0,0,0,0.1);
+    flex: 1;
 }
 .pub-content {
     flex: 1;
