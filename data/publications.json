@@ -1,17 +1,17 @@
 [
     {
-        "title": "Integrating trophic importance into conservation of terrestrial vertebrates",
-        "journal": "Proceedings of the National Academy of Sciences of the United States of America",
-        "year": 2026,
-        "doi": "https://doi.org/10.1073/pnas.2605237123",
-        "author": "Xiyang Hao, Marcel Holyoak, Zhicheng Zhang, and Chuan Yan "
-    },
-    {
         "title": "Temporal integration of diurnal and nocturnal interactions enhances the robustness of plant–pollinator networks",
         "journal": "Conservation Biology",
         "year": 2026,
         "doi": "https://doi.org/10.1111/cobi.70377",
         "author": "Yangyang Zhao, Chuan Yan"
+    },
+    {
+        "title": "Integrating trophic importance into conservation of terrestrial vertebrates",
+        "journal": "Proceedings of the National Academy of Sciences of the United States of America",
+        "year": 2026,
+        "doi": "https://doi.org/10.1073/pnas.2605237123",
+        "author": "Xiyang Hao, Marcel Holyoak, Zhicheng Zhang, and Chuan Yan "
     },
     {
         "title": "ILSM: A package for analyzing the interconnection structure of tripartite interaction networks",
