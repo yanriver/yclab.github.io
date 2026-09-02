@@ -9,3 +9,4 @@ Desktop.ini
 # 本地管理工具（不上传）
 admin/
 admin.py
+PIPELINE.md

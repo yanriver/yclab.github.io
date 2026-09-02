@@ -162,6 +162,12 @@
             transition: background-color 0.3s;
         }
 
+        .source-link-btn.is-disabled {
+            background-color: #cfd6dd;
+            color: #6b7683;
+            cursor: default;
+        }
+
         .source-link-btn:hover {
             background-color: var(--primary-color);
         }
@@ -300,6 +306,12 @@
                             // 默认图片处理
                             const imgSrc = item.image || '../images/default-source.jpg';
 
+                            const linkHtml = item.link
+                                ? `<a href="${item.link}" target="_blank" rel="noopener noreferrer" class="source-link-btn">${btnText}<svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg></a>`
+                                : `<span class="source-link-btn is-disabled" aria-disabled="true">敬请期待</span>`;
+                            const descHtml = item.description
+                                ? `<div class="source-desc">${item.description}</div>`
+                                : '';
                             const sourceItem = document.createElement('div');
                             sourceItem.className = 'source-item';
                             sourceItem.innerHTML = `
@@ -310,14 +322,11 @@
                                     <div>
                                         <span class="source-category-tag">${getCategoryName(item.category)}</span>
                                         <h3 class="source-title">${item.title}</h3>
-                                        <div class="source-desc">${item.description}</div>
+                                        ${descHtml}
                                     </div>
                                     <div class="source-footer">
                                         <span class="source-meta">更新时间: ${item.date}</span>
-                                        <a href="${item.link}" target="_blank" class="source-link-btn">
-                                            ${btnText}
-                                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
-                                        </a>
+                                        ${linkHtml}
                                     </div>
                                 </div>
                             `;
