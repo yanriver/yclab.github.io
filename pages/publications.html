@@ -29,23 +29,34 @@
         }
 
         .timeline-container {
-            margin: 2rem 0 3rem;
-            padding: 1rem 0;
+            margin: 1.5rem 0 2.5rem;
+            padding: 0.75rem 1.25rem 0.6rem;
             background: #fff;
-            border-radius: 12px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            border-radius: 10px;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.06);
             position: sticky;
             top: var(--navbar-height);
             z-index: 999;
             overflow-x: auto;
             -webkit-overflow-scrolling: touch;
+            scrollbar-width: thin;
+        }
+
+        .timeline-container::-webkit-scrollbar {
+            height: 4px;
+        }
+
+        .timeline-container::-webkit-scrollbar-thumb {
+            background: rgba(0, 0, 0, 0.15);
+            border-radius: 4px;
         }
 
         #timelineNav {
             display: flex;
-            gap: 8px;
-            padding: 0 15px;
-            min-width: fit-content;
+            width: 100%;
+            justify-content: space-between;
+            gap: 2px;
+            padding: 0;
         }
 
         .timeline-container::before {
@@ -54,94 +65,150 @@
             top: 0;
             left: 0;
             right: 0;
-            height: 4px;
+            height: 3px;
             z-index: 1;
         }
 
         .timeline {
             display: flex;
-            height: 100px;
+            height: 68px;
             align-items: flex-end;
             position: relative;
-            padding-top: 30px;
-            overflow-x: auto;
-            scrollbar-width: none;
+            width: 100%;
         }
 
-        .timeline::-webkit-scrollbar {
-            display: none;
+        .timeline::after {
+            content: '';
+            position: absolute;
+            bottom: 21px;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: #edf2f7;
+            z-index: 1;
         }
 
         .timeline-year {
             position: relative;
-            flex-shrink: 0;
-            width: 67px;
+            flex: 1 1 0;
+            min-width: 0;
             text-align: center;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: all 0.25s ease;
             z-index: 2;
-            padding-bottom: 25px;
+            padding-bottom: 22px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-end;
+            height: 100%;
+        }
+
+        .timeline-badge {
+            position: absolute;
+            top: 1px;
+            left: 50%;
+            transform: translateX(-50%) translateY(3px);
+            background: rgba(30, 41, 59, 0.95);
+            color: #ffffff;
+            font-size: 0.72rem;
+            font-weight: 600;
+            padding: 2px 6px;
+            border-radius: 4px;
+            white-space: nowrap;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.2s ease, transform 0.2s ease;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.18);
+            z-index: 10;
+        }
+
+        .timeline-badge::after {
+            content: '';
+            position: absolute;
+            bottom: -3px;
+            left: 50%;
+            transform: translateX(-50%);
+            border-width: 3px 3px 0;
+            border-style: solid;
+            border-color: rgba(30, 41, 59, 0.95) transparent;
+        }
+
+        .timeline-year:hover .timeline-badge {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
         }
 
         .timeline-bar {
-            width: 25px;
+            width: clamp(10px, 34%, 22px);
             margin: 0 auto;
             background: var(--secondary-color);
-            transition: height 0.6s cubic-bezier(0.4, 0, 0.2, 1),
-                      background-color 0.3s ease;
+            border-radius: 3px 3px 0 0;
+            transition: height 0.4s ease, background-color 0.25s ease;
         }
 
         .timeline-year-label {
             position: absolute;
-            bottom: 0px;
-            left: 0;
-            right: 0;
-            font-size: 0.9rem;
-            color: #666;
+            bottom: 1px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            font-variant-numeric: tabular-nums;
+            font-size: 0.82rem;
+            color: #64748b;
             font-weight: 500;
-            transition: all 0.3s ease;
-        }
-
-        .timeline-year:hover {
-            transform: translateY(-3px);
+            white-space: nowrap;
+            letter-spacing: -0.01em;
+            transition: all 0.2s ease;
         }
 
         .timeline-year:hover .timeline-bar {
             background: var(--primary-color);
         }
 
-        .timeline-year.active {
-            transform: translateY(-5px);
+        .timeline-year:hover .timeline-year-label {
+            color: var(--secondary-color);
         }
 
         .timeline-year.active .timeline-bar {
-            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
-            box-shadow: 0 4px 12px rgba(52,152,219,0.3);
+            background: linear-gradient(180deg, var(--secondary-color), var(--primary-color));
+            box-shadow: 0 2px 8px rgba(52,152,219,0.35);
+        }
+
+        .timeline-year.active .timeline-year-label {
+            color: var(--primary-color);
+            font-weight: 700;
         }
 
         .publications-list {
             display: flex;
             flex-direction: column;
-            gap: 1.5rem;
+            gap: 1.25rem;
         }
 
         .publication-item {
             background: #fff;
-            border-radius: 8px;
-            padding: 1.5rem;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-            transition: all 0.4s ease;
+            border-radius: 10px;
+            padding: 1.25rem 1.5rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            border: 1px solid rgba(0,0,0,0.04);
+            transition: transform 0.25s ease, box-shadow 0.25s ease;
             opacity: 0;
-            transform: translateY(20px);
-            animation: fadeInUp 0.6s forwards;
+            transform: translateY(16px);
+            animation: fadeInUp 0.5s forwards;
+        }
+
+        .publication-item:hover {
+            box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+            transform: translateY(-2px);
         }
 
         .pub-year {
-            font-size: 1.5rem;
+            font-size: 1.4rem;
             color: var(--primary-color);
             margin: 2rem 0 1rem;
-            padding-bottom: 0.5rem;
-            border-bottom: 2px solid #eee;
+            padding-bottom: 0.4rem;
+            border-bottom: 2px solid #edf2f7;
             display: flex;
             align-items: center;
             scroll-margin-top: 100px;
@@ -150,29 +217,31 @@
         .pub-year::before {
             content: "";
             display: inline-block;
-            width: 8px;
-            height: 20px;
+            width: 6px;
+            height: 18px;
             background: var(--secondary-color);
+            border-radius: 2px;
             margin-right: 10px;
         }
 
         .pub-title {
-            font-size: 1.2rem;
-            color: #333;
-            margin-bottom: 0.8rem;
+            font-size: 1.15rem;
+            color: #1e293b;
+            margin-bottom: 0.5rem;
             font-weight: 600;
-            line-height: 1.4;
+            line-height: 1.45;
         }
 
         .pub-authors {
-            color: #555;
-            font-size: 1rem;
-            margin-bottom: 0.8rem;
-            line-height: 1.4;
+            color: #475569;
+            font-size: 0.95rem;
+            margin-bottom: 0.5rem;
+            line-height: 1.45;
         }
 
         .author-first {
             font-weight: 600;
+            color: #0f172a;
         }
 
         .author-corresponding {
@@ -181,68 +250,82 @@
 
         .author-corresponding::after {
             content: "*";
-            font-size: 1.2em;
+            font-size: 1.1em;
             color: var(--secondary-color);
             position: relative;
-            top: -0.3em;
+            top: -0.2em;
+        }
+
+        .pub-meta {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 0.6rem 1rem;
+            margin-top: 0.5rem;
         }
 
         .pub-journal {
             color: var(--secondary-color);
-            font-size: 1rem;
-            margin-bottom: 0.8rem;
-            font-weight: 500;
-            display: flex;
+            font-size: 0.95rem;
+            font-weight: 600;
+            font-style: italic;
+            display: inline-flex;
             align-items: center;
         }
 
-        .pub-journal::before {
-            content: "📖";
-            margin-right: 0.5rem;
-            font-size: 0.9em;
-        }
-
-        .pub-doi {
-            color: #666;
-            font-size: 0.9rem;
-            margin-bottom: 0.5rem;
-            display: flex;
+        .pub-doi-badge {
+            display: inline-flex;
             align-items: center;
-            flex-wrap: wrap;
-        }
-
-        .count-tooltip {
-            position: fixed;
-            background: rgba(44,62,80,0.95);
-            color: white;
-            padding: 6px 12px;
+            gap: 5px;
+            background: #f1f5f9;
+            color: #475569;
+            padding: 2px 8px;
             border-radius: 4px;
-            font-size: 0.85rem;
-            pointer-events: none;
-            transform: translateY(-8px);
-            opacity: 0;
-            animation: tooltipFade 0.3s forwards;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
-            z-index: 1000;
-            white-space: nowrap;
+            border: 1px solid #e2e8f0;
+            font-size: 0.78rem;
+            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+            text-decoration: none;
+            line-height: 1.3;
+            transition: all 0.2s ease;
+        }
+
+        .pub-doi-badge:hover {
+            background: #e2e8f0;
+            color: var(--secondary-color);
+            border-color: #cbd5e1;
+        }
+
+        .pub-doi-badge .doi-tag {
+            font-weight: 700;
+            color: #64748b;
+            font-size: 0.72rem;
+            letter-spacing: 0.04em;
         }
 
         #backToTopBtn {
             display: none;
             position: fixed;
-            bottom: 30px;
-            right: 30px;
+            bottom: 24px;
+            right: 24px;
             z-index: 99;
             border: none;
             outline: none;
-            background-color: var(--primary-color);
+            background-color: rgba(44, 62, 80, 0.9);
+            backdrop-filter: blur(8px);
             color: white;
             cursor: pointer;
-            padding: 12px 18px;
-            border-radius: 30px;
-            font-size: 14px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
-            transition: all 0.3s ease;
+            padding: 8px 14px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 500;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            transition: all 0.25s ease;
+        }
+
+        #backToTopBtn:hover {
+            background-color: var(--primary-color);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(0,0,0,0.2);
         }
 
         @keyframes fadeInUp {
@@ -258,24 +341,21 @@
         }
 
         @media (max-width: 768px) {
-            .count-tooltip {
-                display: none;
+            .timeline-container {
+                padding: 0.6rem 0.8rem 0.5rem;
+                margin: 1rem 0 1.5rem;
             }
             .timeline {
-            height: 110px;  /* 增加容器高度 */
-            padding-top: 40px;
+                height: 62px;
             }
             .timeline-year {
-                width: 50px;
-                padding-bottom: 25px;
+                padding-bottom: 20px;
             }
-
             .timeline-bar {
-                width: 15px;
+                width: clamp(8px, 30%, 16px);
             }
-            #timelineNav {
-                gap: 4px;
-                padding: 0 8px;
+            .timeline::after {
+                bottom: 19px;
             }
             .pub-year {
                 font-size: 1.3rem;
@@ -283,6 +363,28 @@
 
             .pub-title {
                 font-size: 1.1rem;
+            }
+        }
+
+        @media (max-width: 580px) {
+            .timeline-container {
+                padding: 0.6rem 0.5rem 0.4rem;
+            }
+            #timelineNav {
+                min-width: fit-content;
+                gap: 6px;
+                justify-content: flex-start;
+            }
+            .timeline-year {
+                flex: 0 0 44px;
+                min-width: 44px;
+            }
+            .timeline-bar {
+                width: 14px;
+            }
+            .timeline::after {
+                min-width: fit-content;
+                width: 100%;
             }
         }
 
@@ -348,15 +450,8 @@ document.addEventListener('DOMContentLoaded', function() {
         secondaryColor: '#3498db',
         animationOffset: 100,
         scrollOffset: 150,
-        dataPaths: ['../data/publications.json', './data/publications.json', 'publications.json'],
-        tooltip: {
-            showDelay: 300,
-            hideDelay: 200
-        }
+        dataPaths: ['../data/publications.json', './data/publications.json', 'publications.json']
     };
-
-    let activeTooltip = null;
-    let tooltipTimeout = null;
 
     async function initPublicationsPage() {
         try {
@@ -372,7 +467,6 @@ document.addEventListener('DOMContentLoaded', function() {
             // 页面渲染
             renderPublications(publicationsByYear);
             generateTimeline(publicationsByYear);
-            setupYearActivation(publicationsByYear);
             addBackToTopButton();
             setupEventListeners();
             animatePublicationsOnScroll();
@@ -426,8 +520,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function createYearSection(year, publications) {
         return `
-            <div class="year-section">
-                <h2 class="pub-year" data-year="${year}" id="year-${year}">
+            <div class="year-section" data-year="${year}" id="year-${year}">
+                <h2 class="pub-year">
                     ${year}
                 </h2>
                 <div class="publications-list">
@@ -442,15 +536,19 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function createPublicationItem(pub, index) {
         return `
-            <div class="publication-item" style="animation-delay: ${index * 0.1}s">
+            <div class="publication-item" style="animation-delay: ${index * 0.05}s">
                 <h3 class="pub-title">${pub.title}</h3>
                 ${pub.author ? `<div class="pub-authors">${formatAuthors(pub.author)}</div>` : ''}
-                <div class="pub-journal">${pub.journal || '未标明期刊'}</div>
-                ${pub.doi ? `
-                    <a href="${pub.doi}" class="pub-doi">
-                        DOI: ${pub.doi.replace('https://doi.org/', '')}
-                    </a>
-                ` : ''}
+                <div class="pub-meta">
+                    <span class="pub-journal">${pub.journal || '未标明期刊'}</span>
+                    ${pub.doi ? `
+                        <a href="${pub.doi}" target="_blank" rel="noopener noreferrer" class="pub-doi-badge">
+                            <span class="doi-tag">DOI</span>
+                            <span>${pub.doi.replace('https://doi.org/', '')}</span>
+                            <svg width="9" height="9" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 1h7v7M9 1L1 9"/></svg>
+                        </a>
+                    ` : ''}
+                </div>
             </div>
         `;
     }
@@ -476,98 +574,74 @@ document.addEventListener('DOMContentLoaded', function() {
         const visualMax = Math.max(...Object.values(groupedData).map(arr => arr.length), 3);
 
         timeline.innerHTML = years.map(year => createTimelineYear(year, groupedData[year], visualMax)).join('');
-
-        // 使用事件委托处理交互
-        timeline.addEventListener('mouseover', handleTimelineHover);
-        timeline.addEventListener('mouseout', handleTimelineLeave);
         timeline.addEventListener('click', handleTimelineClick);
     }
 
     function createTimelineYear(year, publications, visualMax) {
         const count = publications.length;
-        const height = count ? count * 10 : 0;
+        const maxBarHeight = 34;
+        const minBarHeight = count > 0 ? 6 : 2;
+        const height = count ? Math.round(minBarHeight + ((count / visualMax) * (maxBarHeight - minBarHeight))) : 2;
         return `
             <div class="timeline-year" data-year="${year}" data-count="${count}">
+                <div class="timeline-badge">${count}篇</div>
                 <div class="timeline-bar" style="height: ${height}px"></div>
                 <div class="timeline-year-label">${year}</div>
             </div>
         `;
     }
 
-    function handleTimelineHover(e) {
-        if (window.innerWidth <= 768) return;
-
-        const yearElement = e.target.closest('.timeline-year');
-        if (!yearElement) return;
-
-        clearTimeout(tooltipTimeout);
-        tooltipTimeout = setTimeout(() => {
-            showTooltip(yearElement);
-        }, config.tooltip.showDelay);
-    }
-
-    function handleTimelineLeave(e) {
-        clearTimeout(tooltipTimeout);
-        if (activeTooltip) {
-            activeTooltip.remove();
-            activeTooltip = null;
-        }
-    }
-
-    function showTooltip(element) {
-        if (activeTooltip) activeTooltip.remove();
-
-        activeTooltip = document.createElement('div');
-        activeTooltip.className = 'count-tooltip';
-        activeTooltip.textContent = `${element.dataset.count}篇`;
-        document.body.appendChild(activeTooltip);
-
-        const rect = element.getBoundingClientRect();
-        activeTooltip.style.left = `${rect.left + rect.width / 2 - activeTooltip.offsetWidth / 2}px`;
-        activeTooltip.style.top = `${rect.top - 35}px`;
-    }
+    let isClickScrolling = false;
+    let scrollLockTimer = null;
 
     function handleTimelineClick(e) {
         const yearElement = e.target.closest('.timeline-year');
         if (!yearElement) return;
 
         const year = yearElement.dataset.year;
+        updateActiveYear(year);
         scrollToYear(year);
     }
 
     function scrollToYear(year) {
-        const targetSection = document.querySelector(`.pub-year[data-year="${year}"]`);
+        const targetSection = document.getElementById(`year-${year}`);
         if (!targetSection) return;
 
         const navbar = document.querySelector('.navbar');
-        const navbarHeight = navbar ? navbar.offsetHeight : 0;
-        const targetPosition = targetSection.offsetTop - navbarHeight - 20;
+        const navbarHeight = navbar ? navbar.offsetHeight : 72;
+        const timelineContainer = document.querySelector('.timeline-container');
+        const timelineHeight = timelineContainer ? timelineContainer.offsetHeight : 68;
+        const targetPosition = targetSection.offsetTop - navbarHeight - timelineHeight - 12;
+
+        isClickScrolling = true;
+        clearTimeout(scrollLockTimer);
 
         window.scrollTo({
-            top: targetPosition,
+            top: Math.max(0, targetPosition),
             behavior: 'smooth'
         });
-    }
 
-    function setupYearActivation() {
-        const observer = new IntersectionObserver(entries => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    const year = entry.target.dataset.year;
-                    updateActiveYear(year);
-                }
-            });
-        }, {
-            rootMargin: '-40% 0px -40% 0px',
-            threshold: 0.1
-        });
-
-        document.querySelectorAll('.pub-year').forEach(section => observer.observe(section));
+        scrollLockTimer = setTimeout(() => {
+            isClickScrolling = false;
+        }, 850);
     }
 
     function updateActiveYear(year) {
         document.querySelectorAll('.timeline-year').forEach(el => {
-            el.classList.toggle('active', el.dataset.year === year);
+            const isActive = el.dataset.year === year;
+            el.classList.toggle('active', isActive);
+            if (isActive) {
+                const container = document.querySelector('.timeline-container');
+                if (container && container.scrollWidth > container.clientWidth) {
+                    const elOffsetLeft = el.offsetLeft;
+                    const elWidth = el.offsetWidth;
+                    const containerWidth = container.clientWidth;
+                    container.scrollTo({
+                        left: elOffsetLeft - (containerWidth / 2) + (elWidth / 2),
+                        behavior: 'smooth'
+                    });
+                }
+            }
         });
         history.replaceState(null, '', `#year-${year}`);
     }
@@ -591,6 +665,19 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function setupEventListeners() {
+        // 时间轴鼠标滚轮水平滚动支持
+        const timelineContainer = document.querySelector('.timeline-container');
+        if (timelineContainer) {
+            timelineContainer.addEventListener('wheel', (e) => {
+                if (timelineContainer.scrollWidth > timelineContainer.clientWidth) {
+                    if (Math.abs(e.deltaY) > Math.abs(e.deltaX)) {
+                        e.preventDefault();
+                        timelineContainer.scrollLeft += e.deltaY;
+                    }
+                }
+            }, { passive: false });
+        }
+
         // 移动端菜单切换
         const hamburger = document.querySelector('.hamburger');
         const navLinks = document.querySelector('.nav-links');
@@ -600,14 +687,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 hamburger.classList.toggle('active');
             });
         }
-
-        // 窗口大小变化处理
-        window.addEventListener('resize', () => {
-            if (activeTooltip) {
-                activeTooltip.remove();
-                activeTooltip = null;
-            }
-        });
 
         // 滚动事件处理
         window.addEventListener('scroll', () => {
@@ -628,18 +707,26 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function updateActiveYearOnScroll() {
-        const sections = Array.from(document.querySelectorAll('.pub-year'));
-        const scrollPosition = window.pageYOffset + (document.querySelector('.navbar')?.offsetHeight || 0);
+        if (isClickScrolling) return;
 
+        const navbar = document.querySelector('.navbar');
+        const navbarHeight = navbar ? navbar.offsetHeight : 72;
+        const timelineContainer = document.querySelector('.timeline-container');
+        const timelineHeight = timelineContainer ? timelineContainer.offsetHeight : 68;
+        const scrollThreshold = window.pageYOffset + navbarHeight + timelineHeight + 35;
+
+        const sections = Array.from(document.querySelectorAll('.year-section'));
+        if (!sections.length) return;
+
+        let activeYear = sections[0].dataset.year;
         for (const section of sections) {
-            const sectionTop = section.offsetTop;
-            const sectionBottom = sectionTop + section.offsetHeight;
-
-            if (scrollPosition >= sectionTop && scrollPosition < sectionBottom) {
-                updateActiveYear(section.dataset.year);
+            if (section.offsetTop <= scrollThreshold) {
+                activeYear = section.dataset.year;
+            } else {
                 break;
             }
         }
+        updateActiveYear(activeYear);
     }
 
     function showErrorUI(error) {
