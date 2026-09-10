@@ -1006,9 +1006,9 @@
                         .attr("r", d => Math.max(15, Math.sqrt(Math.max(1, d.value)) * 4))
                         .attr("fill", d => {
                             if (d.status === "fixed") return "#2c3e50";
-                            if (d.degree === "博士后") return "#9b59b6"; // 为博士后添加紫色
+                            if (d.status === "graduated") return "#e74c3c"; // 已毕业优先标红
+                            if (d.degree === "博士后") return "#9b59b6";   // 在读博士后为紫色
                             if (d.status === "active") return "#3498db";
-                            if (d.status === "graduated") return "#e74c3c";
                             return "#3498db";
                         })
                         .attr("stroke", "#fff")
