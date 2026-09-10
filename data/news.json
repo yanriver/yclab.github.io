@@ -1,5 +1,23 @@
 [
     {
+        "id": "pnas-2026-trophic-conservation",
+        "title": "课题组最新研究成果刊登于PNAS：将食物网营养重要性纳入全球陆生脊椎动物保护规划",
+        "date": "2026-08-28",
+        "summary": "严川团队及其合作者利用涵盖25000余种陆生脊椎动物的全球食物网数据，构建“营养重要性-全球濒危性”（TIGE）指数，揭示了营养结构在识别大尺度保护优先区中的关键价值。",
+        "image": "news/images/pnas-2026-trophic-1.jpg",
+        "articlePath": "news/articles/pnas-2026-trophic-conservation.html",
+        "category": "research"
+    },
+    {
+        "id": "conservation-biology-2026-08",
+        "title": "课题组论文在Conservation Biology发表：昼夜整合传粉网络增强生态系统稳健性",
+        "date": "2026-08-20",
+        "summary": "严川团队整合全球昼夜传粉互作数据集，从多层网络视角揭示了昼夜双层传粉网络的结构不对称性与时间补偿效应，阐明了昼夜整合增强系统稳健性的生态学机制。",
+        "image": "news/images/conservation-biology-2026-1.jpg",
+        "articlePath": "news/articles/conservation-biology-2026-08.html",
+        "category": "research"
+    },
+    {
         "id": "group-meeting-safety-2026-03-27",
         "title": "实验室组会与安全教育学习",
         "date": "2026-03-27",

@@ -233,27 +233,23 @@
         }
 
         .pub-authors {
-            color: #475569;
             font-size: 0.95rem;
+            color: #475569;
             margin-bottom: 0.5rem;
-            line-height: 1.45;
+            line-height: 1.5;
         }
 
-        .author-first {
-            font-weight: 600;
+        .author-lab-member {
+            font-weight: 700;
             color: #0f172a;
         }
 
-        .author-corresponding {
-            position: relative;
-        }
-
-        .author-corresponding::after {
-            content: "*";
-            font-size: 1.1em;
+        .author-tag {
             color: var(--secondary-color);
-            position: relative;
-            top: -0.2em;
+            font-size: 0.85em;
+            font-weight: 600;
+            margin-left: 1px;
+            vertical-align: super;
         }
 
         .pub-meta {
@@ -450,8 +446,11 @@ document.addEventListener('DOMContentLoaded', function() {
         secondaryColor: '#3498db',
         animationOffset: 100,
         scrollOffset: 150,
-        dataPaths: ['../data/publications.json', './data/publications.json', 'publications.json']
+        dataPaths: ['../data/publications.json', './data/publications.json', 'publications.json'],
+        membersPaths: ['../data/members.json', './data/members.json', 'members.json']
     };
+
+    let labMembersSet = new Set();
 
     async function initPublicationsPage() {
         try {
@@ -459,7 +458,8 @@ document.addEventListener('DOMContentLoaded', function() {
             document.documentElement.style.setProperty('--primary-color', config.primaryColor);
             document.documentElement.style.setProperty('--secondary-color', config.secondaryColor);
 
-            // 数据加载与处理
+            // 加载实验室成员名单与成果数据
+            await loadLabMembers();
             const data = await loadPublicationsData();
             const yearRange = getYearRange(data);
             const publicationsByYear = groupPublications(data, yearRange);
@@ -472,6 +472,24 @@ document.addEventListener('DOMContentLoaded', function() {
             animatePublicationsOnScroll();
         } catch (error) {
             showErrorUI(error);
+        }
+    }
+
+    async function loadLabMembers() {
+        for (const path of config.membersPaths) {
+            try {
+                const response = await fetch(path);
+                if (response.ok) {
+                    const members = await response.json();
+                    members.forEach(m => {
+                        if (m.name) labMembersSet.add(m.name.trim().toLowerCase());
+                        if (m.name_en) labMembersSet.add(m.name_en.trim().toLowerCase());
+                    });
+                    return;
+                }
+            } catch (e) {
+                // 忽略单个路径失败
+            }
         }
     }
 
@@ -556,14 +574,20 @@ document.addEventListener('DOMContentLoaded', function() {
     function formatAuthors(authorsStr) {
         return authorsStr.split(', ')
             .map(author => {
-                let html = author;
-                if (author.includes('#')) {
-                    html = `<span class="author-first">${author.replace('#', '')}</span>`;
-                }
-                if (author.includes('*')) {
-                    html = `<span class="author-corresponding">${html.replace('*', '')}</span>`;
-                }
-                return html;
+                let cleanName = author.replace(/#/g, '').replace(/\*/g, '').trim();
+                let isFirst = author.includes('#');
+                let isCorr = author.includes('*');
+
+                // 检查是否为实验室成员（忽略大小写及可能的 and 前缀）
+                let lookupName = cleanName.replace(/^and\s+/i, '').trim().toLowerCase();
+                let isMember = labMembersSet.has(lookupName);
+
+                let tags = '';
+                if (isFirst) tags += '<sup class="author-tag">#</sup>';
+                if (isCorr) tags += '<sup class="author-tag">*</sup>';
+
+                let cls = isMember ? ' class="author-lab-member"' : '';
+                return `<span${cls}>${cleanName}${tags}</span>`;
             })
             .join(', ');
     }
