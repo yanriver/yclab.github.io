@@ -654,6 +654,12 @@
                     });
                 });
 
+                function parseGrade(gradeStr) {
+                    if (!gradeStr) return 999;
+                    const num = parseInt(gradeStr.replace(/\D/g, ''));
+                    return isNaN(num) ? 999 : num;
+                }
+
                 function displayMembers(members) {
                     container.innerHTML = '';
                     networkContainer.style.display = 'none';
@@ -672,6 +678,10 @@
 
                     for (const [degree, membersList] of Object.entries(groupedMembers)) {
                         if (membersList.length === 0) continue;
+                        
+                        // 按年级由低到高（如 20级 -> 21级 -> 22级 -> 23级 -> 24级 -> 25级）排序
+                        membersList.sort((a, b) => parseGrade(a.grade) - parseGrade(b.grade));
+
                         const section = document.createElement('div');
                         section.className = 'degree-section';
                         const title = document.createElement('h2');
@@ -729,15 +739,26 @@
                     const enNameToMember = {};
 
                     members.forEach(member => {
+                        const existing = memberMap[member.name];
+                        // 如果同名成员已有记录（如郝希阳既有博士记录又有博士后记录），保留在读状态（active优先）
+                        let chosenStatus = member.status;
+                        let chosenDegree = member.degree;
+                        if (existing) {
+                            if (existing.status === 'active' || member.status === 'active') {
+                                chosenStatus = 'active';
+                                chosenDegree = (existing.status === 'active' ? existing.degree : member.degree);
+                            }
+                        }
+
                         memberMap[member.name] = {
                             id: member.name,
                             name: member.name,
                             name_en: member.name_en,
-                            degree: member.degree,
-                            status: member.status,
-                            paperCount: 0,
-                            papers: [],
-                            coauthors: {}
+                            degree: chosenDegree,
+                            status: chosenStatus,
+                            paperCount: existing ? existing.paperCount : 0,
+                            papers: existing ? existing.papers : [],
+                            coauthors: existing ? existing.coauthors : {}
                         };
                         if (member.name_en) {
                             enNameToMember[member.name_en] = member.name;
