@@ -780,7 +780,7 @@
                         }
 
                         const authors = pub.author.split(',').map(author => {
-                            return author.replace(/[#*]/g, '').trim();
+                            return author.replace(/[#*]/g, '').replace(/^and\s+/i, '').trim();
                         });
 
                         const paperInfo = {
