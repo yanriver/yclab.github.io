@@ -37,7 +37,8 @@
         "email": "zhaoyangyangsky@163.com",
         "interest": "1.生态互作网络。2.草地传粉者-开花植物-植食者多层互作网络。3.野外生物多样性调查",
         "image": "../images/members/赵洋洋.jpg",
-        "status": "active"
+        "status": "active",
+        "direction": ""
     },
     {
         "name": "周飞",
@@ -98,7 +99,8 @@
         "email": "sunwch2023@lzu.edu.cn",
         "interest": "群落生态学",
         "image": "../images/members/孙伟成.jpg",
-        "status": "active"
+        "status": "graduated",
+        "direction": "植物所读博"
     },
     {
         "name": "白广生",
